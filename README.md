@@ -68,10 +68,6 @@ It also builds a readable seating timeline so case studies are easier to explain
   C1 data structures
 - `app/simulator.py`
   C3 simulation logic and C4 metrics
-- `app/io_utils.py`
-  helper functions for loading input files and saving output
-- `app/main.py`
-  temporary runnable entry point for manual testing
 
 ## How the simulation currently works
 
@@ -102,59 +98,3 @@ Most relevant files:
 - `app/models.py`
 - `app/simulator.py`
 
-What can be improved for C2:
-
-- change arrival input from CSV to the final JSON format if the team wants to follow the plan exactly
-- add stricter format checking and clearer error messages
-- add a save-to-JSON results function instead of only saving plain-text reports
-- standardize one final input/output schema for the whole project
-
-The simulation engine already expects clean structured data, so C2 mainly needs to make loading/saving more complete and consistent.
-
-## What teammates working on C5 should know
-
-`app/main.py` is only a basic testing interface right now.
-
-For `C5`, teammates can:
-
-- turn it into the final text menu required by the project plan
-- separate `load`, `run`, `view`, and `save` more clearly
-- keep calling the existing `run_simulation(...)` function instead of duplicating logic
-
-Recommended reuse path:
-
-- keep `app/models.py` unchanged as the shared structure layer
-- keep `app/simulator.py` as the core engine
-- let `app/main.py` become the final menu wrapper around them
-
-## What teammates working on C6 should know
-
-For documentation and GitHub setup, the important code files to explain are:
-
-- `app/models.py`
-- `app/simulator.py`
-- `app/io_utils.py`
-- `app/main.py`
-
-The current sample data in `data/` can already be used for demo and testing, but it can still be reorganized once the team finalizes the file format and case studies.
-
-## Quick code map
-
-- `app/models.py`
-  entity definitions
-- `app/simulator.py`
-  validation, queue assignment, event loop, seating, metrics, report formatting
-- `app/io_utils.py`
-  file loading and saving helpers
-- `app/main.py`
-  simple manual runner for testing the current engine
-
-## Current goal of this code
-
-This code is meant to provide a stable base for the team:
-
-- `C1` already defines the core entities
-- `C3` already provides a working simulation engine
-- `C4` already computes the main performance metrics
-
-Other members can now build `C2`, `C5`, and `C6` on top of this structure instead of starting from scratch.
