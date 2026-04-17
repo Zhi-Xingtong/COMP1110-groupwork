@@ -87,14 +87,3 @@ High-level flow:
 5. Record each seating decision.
 6. Compute summary metrics.
 7. Format the result into a readable report.
-
-## What teammates working on C2 should know
-
-`C2` should connect directly to the existing engine instead of rewriting logic.
-
-Most relevant files:
-
-- `app/io_utils.py`
-- `app/models.py`
-- `app/simulator.py`
-
