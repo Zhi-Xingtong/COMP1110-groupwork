@@ -1,89 +1,143 @@
-# COMP1110 Topic C: C1 + C3 + C4 Handover Notes
+# COMP1110 Topic C Restaurant Queue Simulation
 
-This README only explains the parts currently implemented for `C1`, `C3`, and `C4`, so other group members can quickly understand the existing code and continue with `C2`, `C5`, and `C6`.
+This project simulates restaurant queue strategies using a text-based Python program. It models customer arrivals, queue assignment, seating decisions, table turnover, and performance metrics so the group can compare different queue-management strategies under controlled scenarios.
 
-## What is already implemented
+## Project overview
 
-### C1: Data model
+The system focuses on a size-based queue model with these main assumptions:
 
-File: `app/models.py`
-
-This file defines the main entities used by the simulation:
-
-- `QueueRule`: a queue size rule such as `1-2`, `3-4`, `5+`
-- `CustomerGroup`: one arriving customer group
-- `Table`: one restaurant table
-- `SeatingRecord`: one successful seating event
-- `SimulationResult`: all output metrics after one run
-
-These classes are the shared data layer for the whole program.
-
-### C3: Core simulation engine
-
-File: `app/simulator.py`
-
-This file contains the simulation logic.
-
-Current method:
-
-- Customer groups are processed in arrival-time order.
-- Each group is assigned to the first queue whose size range matches the group size.
-- The simulation is event-driven, not minute-by-minute.
-- The clock jumps to the next event:
-  either the next customer arrival or the next table becoming free.
-- When tables are available, the program checks the front group of each queue.
-- For each table, it seats the earliest-arriving eligible group among those queue fronts.
-- No table sharing or table combining is allowed.
-- Groups never leave the queue once they arrive.
-
-This matches the main assumptions from the research:
-
+- no table sharing
+- no table combining
 - strict FCFS within each queue
 - no walk-aways
 - fixed dining duration
-- optional fixed turnover/cleaning time
+- optional fixed turnover time
 - optional reserved tables excluded from walk-in seating
 
-### C4: Metrics computation
+The simulation is event-driven. Instead of moving minute by minute, the clock jumps to the next arrival or the next table becoming available.
 
-Main file: `app/simulator.py`
+## File list
 
-After each run, the program computes:
+- `main.py`
+  text menu for loading files, running the simulation, viewing results, and saving results
+- `app/models.py`
+  shared data structures for queues, groups, tables, seating records, and simulation results
+- `app/simulator.py`
+  core simulation engine, validation, metrics computation, and formatted console output
+- `app/file_io.py`
+  JSON loading and saving functions for restaurant settings, customer arrivals, and results
+- `sample_data/restaurant_settings.json`
+  example restaurant configuration
+- `sample_data/customer_arrivals.json`
+  example scenario input
+- `case_studies/`
+  richer scenario data pack for comparison, demo, and report writing
+- `tests/test_project.py`
+  automated test cases for core project requirements
+- `WU_HANLIN_CONTRIBUTION.md`
+  clear record of Wu Hanlin's coding contribution
 
-- average wait time
-- maximum wait time
-- groups served / groups unserved
-- maximum queue length per queue
+## JSON format
+
+### Restaurant settings JSON
+
+```json
+{
+  "restaurant_name": "Group 15 Demo Restaurant",
+  "service_threshold": 15,
+  "turnover_duration": 5,
+  "queues": [
+    { "name": "Queue A (1-2)", "min_size": 1, "max_size": 2 },
+    { "name": "Queue B (3-4)", "min_size": 3, "max_size": 4 },
+    { "name": "Queue C (5+)", "min_size": 5, "max_size": null }
+  ],
+  "tables": [
+    { "table_id": "T1", "capacity": 2, "reserved": false },
+    { "table_id": "T2", "capacity": 4, "reserved": false }
+  ]
+}
+```
+
+### Customer arrivals JSON
+
+```json
+{
+  "scenario_name": "Mixed Lunch Rush",
+  "groups": [
+    { "group_id": "G1", "arrival_time": 0, "group_size": 2, "dining_duration": 30 },
+    { "group_id": "G2", "arrival_time": 2, "group_size": 4, "dining_duration": 45 }
+  ]
+}
+```
+
+### Results JSON
+
+After running the simulation, the program can save a results JSON containing summary metrics and the seating timeline, including:
+
+- average and maximum wait time
+- groups served and unserved
+- queue performance
 - table utilization
 - seat utilization
-- service level (`% seated within X minutes`)
-- average wasted seats per seating
-- queue-level served counts and average wait times
+- service level
+- seating records
 
-It also builds a readable seating timeline so case studies are easier to explain.
+## How to run
 
-## Files and responsibilities
+1. Open a terminal in the project folder.
+2. Run:
 
-- `app/models.py`
-  C1 data structures
-- `app/simulator.py`
-  C3 simulation logic and C4 metrics
+```bash
+python main.py
+```
 
-## How the simulation currently works
+3. Choose menu options:
+   - load restaurant settings
+   - load customer arrivals
+   - run simulation
+   - view results
+   - save results
 
-Input expected by the engine:
+You can use the sample files in `sample_data/` for a quick demo.
 
-- restaurant settings
-  queues + tables
-- arrival scenario
-  groups with arrival time, size, and dining duration
+If you need more data for presentation or analysis, use the files in `case_studies/`.
 
-High-level flow:
+## Data pack for report and demo
 
-1. Load restaurant settings and arrival groups.
-2. Validate the data.
-3. Sort groups by arrival time.
-4. Run the event loop.
-5. Record each seating decision.
-6. Compute summary metrics.
-7. Format the result into a readable report.
+The `case_studies/` folder now contains:
+
+- 5 restaurant setting files
+- 4 arrival scenario files
+- 20 customer groups in each case-study arrival file
+- suggested pairings for comparing queue strategies and table layouts
+
+This makes the codebase more useful for final demo, report writing, and contribution evidence.
+
+## How to test
+
+Run:
+
+```bash
+python -m unittest discover -s tests -p "test_*.py"
+```
+
+The automated tests cover:
+
+- normal operation
+- all same group size
+- zero customers
+- group larger than any table
+- boundary capacity match
+- invalid input file
+- JSON load/save integration
+- case-study dataset loading and simulation runs
+
+## Contribution note
+
+According to the project plan, Wu Hanlin is responsible for:
+
+- `C2` File I/O
+- `C5` Text menu, README, GitHub support materials
+- `C6` Test cases
+
+That work is implemented in this version and documented in `WU_HANLIN_CONTRIBUTION.md`.

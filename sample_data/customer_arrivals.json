@@ -1,0 +1,35 @@
+{
+  "scenario_name": "Mixed Lunch Rush",
+  "groups": [
+    {
+      "group_id": "G1",
+      "arrival_time": 0,
+      "group_size": 2,
+      "dining_duration": 30
+    },
+    {
+      "group_id": "G2",
+      "arrival_time": 2,
+      "group_size": 4,
+      "dining_duration": 45
+    },
+    {
+      "group_id": "G3",
+      "arrival_time": 5,
+      "group_size": 1,
+      "dining_duration": 20
+    },
+    {
+      "group_id": "G4",
+      "arrival_time": 6,
+      "group_size": 3,
+      "dining_duration": 35
+    },
+    {
+      "group_id": "G5",
+      "arrival_time": 10,
+      "group_size": 5,
+      "dining_duration": 50
+    }
+  ]
+}

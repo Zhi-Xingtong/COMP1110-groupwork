@@ -7,25 +7,46 @@ from app.models import CustomerGroup, QueueRule, SeatingRecord, SimulationResult
 
 
 def validate_inputs(queue_rules: list[QueueRule], tables: list[Table], groups: list[CustomerGroup]) -> None:
+    """Validate queue rules, tables, and group records before simulation."""
+
     if not queue_rules:
         raise ValueError("At least one queue rule is required.")
     if not tables:
         raise ValueError("At least one table is required.")
-    if not groups:
-        raise ValueError("At least one customer group is required.")
 
+    seen_queue_names: set[str] = set()
     for queue_rule in queue_rules:
+        if not queue_rule.name:
+            raise ValueError("Queue names cannot be empty.")
+        if queue_rule.name in seen_queue_names:
+            raise ValueError(f"Duplicate queue name '{queue_rule.name}'.")
+        seen_queue_names.add(queue_rule.name)
         if queue_rule.min_size <= 0:
             raise ValueError(f"Queue '{queue_rule.name}' has invalid min_size.")
         if queue_rule.max_size is not None and queue_rule.max_size < queue_rule.min_size:
             raise ValueError(f"Queue '{queue_rule.name}' has invalid max_size.")
 
+    seen_table_ids: set[str] = set()
     for table in tables:
+        if not table.table_id:
+            raise ValueError("Table IDs cannot be empty.")
+        if table.table_id in seen_table_ids:
+            raise ValueError(f"Duplicate table ID '{table.table_id}'.")
+        seen_table_ids.add(table.table_id)
         if table.capacity <= 0:
             raise ValueError(f"Table '{table.table_id}' must have positive capacity.")
 
+    if not groups:
+        return
+
     max_capacity = max(table.capacity for table in tables)
+    seen_group_ids: set[str] = set()
     for group in groups:
+        if not group.group_id:
+            raise ValueError("Group IDs cannot be empty.")
+        if group.group_id in seen_group_ids:
+            raise ValueError(f"Duplicate group ID '{group.group_id}'.")
+        seen_group_ids.add(group.group_id)
         if group.group_size <= 0 or group.dining_duration <= 0 or group.arrival_time < 0:
             raise ValueError(f"Group '{group.group_id}' contains invalid values.")
         if group.group_size > max_capacity:
@@ -37,6 +58,8 @@ def validate_inputs(queue_rules: list[QueueRule], tables: list[Table], groups: l
 
 
 def assign_queue(group: CustomerGroup, queue_rules: list[QueueRule]) -> str:
+    """Return the first queue rule that matches the group size."""
+
     for rule in queue_rules:
         if rule.matches(group.group_size):
             return rule.name
@@ -49,7 +72,10 @@ def _seat_waiting_groups(
     waiting: dict[str, list[CustomerGroup]],
     tables: list[Table],
     seating_records: list[SeatingRecord],
+    turnover_duration: int,
 ) -> None:
+    """Seat eligible front-of-queue groups on currently available tables."""
+
     while True:
         available_tables = sorted(
             [table for table in tables if table.is_available],
@@ -75,19 +101,22 @@ def _seat_waiting_groups(
             )
             waiting[queue_name].pop(0)
             group.seated_time = current_time
+            group.departure_time = current_time + group.dining_duration + turnover_duration
             group.table_id = table.table_id
             table.occupied_by = group.group_id
-            table.occupied_until = current_time + group.dining_duration
-            table.occupied_minutes += group.dining_duration
+            table.occupied_until = group.departure_time
+            table.occupied_minutes += group.dining_duration + turnover_duration
             table.seated_groups += 1
             seating_records.append(
                 SeatingRecord(
                     time=current_time,
+                    departure_time=group.departure_time,
                     table_id=table.table_id,
                     group_id=group.group_id,
                     queue_name=queue_name,
                     wait_time=current_time - group.arrival_time,
                     dining_duration=group.dining_duration,
+                    wasted_seats=table.capacity - group.group_size,
                 )
             )
             assigned_any = True
@@ -105,15 +134,21 @@ def run_simulation(
     service_threshold: int = 15,
     turnover_duration: int = 0,
 ) -> SimulationResult:
+    """Run the restaurant queue simulation and return summarized metrics."""
+
     validate_inputs(queue_rules, tables, groups)
+    if service_threshold < 0:
+        raise ValueError("Service threshold cannot be negative.")
     if turnover_duration < 0:
         raise ValueError("Turnover duration cannot be negative.")
+
     tables = deepcopy(tables)
-    groups = deepcopy(groups)
+    groups = sorted(deepcopy(groups), key=lambda group: (group.arrival_time, group.group_id))
     queue_names = [rule.name for rule in queue_rules]
     active_tables = [table for table in tables if not table.reserved]
     if not active_tables:
         raise ValueError("At least one non-reserved table is required for walk-in simulation.")
+
     waiting: dict[str, list[CustomerGroup]] = {name: [] for name in queue_names}
     max_queue_lengths: dict[str, int] = defaultdict(int)
     seating_records: list[SeatingRecord] = []
@@ -144,13 +179,14 @@ def run_simulation(
             max_queue_lengths[queue_name] = max(max_queue_lengths[queue_name], len(waiting[queue_name]))
             arrival_index += 1
 
-        _seat_waiting_groups(current_time, queue_names, waiting, active_tables, seating_records)
-
-        if turnover_duration:
-            for table in active_tables:
-                if table.occupied_until is not None and table.occupied_by is not None:
-                    table.occupied_until += turnover_duration
-                    table.occupied_by = None
+        _seat_waiting_groups(
+            current_time=current_time,
+            queue_names=queue_names,
+            waiting=waiting,
+            tables=active_tables,
+            seating_records=seating_records,
+            turnover_duration=turnover_duration,
+        )
 
     served_groups = [group for group in groups if group.seated_time is not None]
     unserved_groups = [group for group in groups if group.seated_time is None]
@@ -165,17 +201,16 @@ def run_simulation(
             waits_by_queue[group.queue_name].append(group.wait_time)
         if group.table_id is not None:
             size_gaps.append(table_map[group.table_id].capacity - group.group_size)
+
     total_time = max(
         [0]
         + [group.arrival_time for group in groups]
-        + [record.time + record.dining_duration + turnover_duration for record in seating_records]
+        + [record.departure_time for record in seating_records]
     )
     total_capacity_time = total_time * len(active_tables) if total_time else 0
     used_capacity_time = sum(table.occupied_minutes for table in active_tables)
     total_seat_minutes = total_time * sum(table.capacity for table in active_tables) if total_time else 0
-    used_seat_minutes = sum(
-        group.group_size * group.dining_duration for group in served_groups
-    )
+    used_seat_minutes = sum(group.group_size * group.dining_duration for group in served_groups)
 
     average_wait = sum(wait_times) / len(wait_times) if wait_times else 0.0
     service_level = (
@@ -204,6 +239,8 @@ def run_simulation(
         average_table_size_gap=(sum(size_gaps) / len(size_gaps) if size_gaps else 0.0),
         reserved_tables=sum(1 for table in tables if table.reserved),
         walk_in_tables=len(active_tables),
+        service_threshold=service_threshold,
+        turnover_duration=turnover_duration,
         max_queue_lengths={name: max_queue_lengths.get(name, 0) for name in queue_names},
         served_by_queue=served_by_queue,
         average_wait_by_queue=average_wait_by_queue,
@@ -213,6 +250,8 @@ def run_simulation(
 
 
 def format_result(result: SimulationResult) -> str:
+    """Build a readable multi-line report for console output."""
+
     lines = [
         f"Restaurant: {result.restaurant_name}",
         f"Scenario: {result.scenario_name}",
@@ -220,10 +259,11 @@ def format_result(result: SimulationResult) -> str:
         f"Groups unserved: {result.groups_unserved}",
         f"Average wait time: {result.average_wait_time:.2f} minutes",
         f"Max wait time: {result.max_wait_time} minutes",
-        f"Table utilization (occupied tables): {result.table_utilization:.2f}%",
+        f"Table utilization (unavailable tables): {result.table_utilization:.2f}%",
         f"Seat utilization (used seats): {result.seat_utilization:.2f}%",
-        f"Service level (<=15 min): {result.service_level:.2f}%",
+        f"Service level (<={result.service_threshold} min): {result.service_level:.2f}%",
         f"Average wasted seats per seating: {result.average_table_size_gap:.2f}",
+        f"Turnover duration: {result.turnover_duration} minutes",
         f"Walk-in tables used: {result.walk_in_tables}",
         f"Reserved tables withheld: {result.reserved_tables}",
         "Max queue lengths:",
@@ -237,7 +277,8 @@ def format_result(result: SimulationResult) -> str:
         lines.extend(
             "  - "
             f"t={record.time}: group {record.group_id} seated at {record.table_id} "
-            f"from queue {record.queue_name} after waiting {record.wait_time} min"
+            f"from queue {record.queue_name} after waiting {record.wait_time} min; "
+            f"departure at t={record.departure_time}; wasted seats={record.wasted_seats}"
             for record in result.seating_records
         )
     else:

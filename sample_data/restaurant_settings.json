@@ -1,0 +1,44 @@
+{
+  "restaurant_name": "Group 15 Demo Restaurant",
+  "service_threshold": 15,
+  "turnover_duration": 5,
+  "queues": [
+    {
+      "name": "Queue A (1-2)",
+      "min_size": 1,
+      "max_size": 2
+    },
+    {
+      "name": "Queue B (3-4)",
+      "min_size": 3,
+      "max_size": 4
+    },
+    {
+      "name": "Queue C (5+)",
+      "min_size": 5,
+      "max_size": null
+    }
+  ],
+  "tables": [
+    {
+      "table_id": "T1",
+      "capacity": 2,
+      "reserved": false
+    },
+    {
+      "table_id": "T2",
+      "capacity": 2,
+      "reserved": false
+    },
+    {
+      "table_id": "T3",
+      "capacity": 4,
+      "reserved": false
+    },
+    {
+      "table_id": "T4",
+      "capacity": 6,
+      "reserved": true
+    }
+  ]
+}

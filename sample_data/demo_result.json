@@ -1,0 +1,77 @@
+{
+  "restaurant_name": "Group 15 Demo Restaurant",
+  "scenario_name": "Mixed Lunch Rush",
+  "total_groups": 5,
+  "groups_served": 4,
+  "groups_unserved": 1,
+  "average_wait_time": 11.5,
+  "max_wait_time": 46,
+  "table_utilization": 54.347826086956516,
+  "seat_utilization": 49.59239130434783,
+  "service_level": 75.0,
+  "average_table_size_gap": 0.5,
+  "reserved_tables": 1,
+  "walk_in_tables": 3,
+  "service_threshold": 15,
+  "turnover_duration": 5,
+  "max_queue_lengths": {
+    "Queue A (1-2)": 1,
+    "Queue B (3-4)": 1,
+    "Queue C (5+)": 1
+  },
+  "served_by_queue": {
+    "Queue A (1-2)": 2,
+    "Queue B (3-4)": 2,
+    "Queue C (5+)": 0
+  },
+  "average_wait_by_queue": {
+    "Queue A (1-2)": 0.0,
+    "Queue B (3-4)": 23.0,
+    "Queue C (5+)": 0.0
+  },
+  "seating_records": [
+    {
+      "time": 0,
+      "departure_time": 35,
+      "table_id": "T1",
+      "group_id": "G1",
+      "queue_name": "Queue A (1-2)",
+      "wait_time": 0,
+      "dining_duration": 30,
+      "wasted_seats": 0
+    },
+    {
+      "time": 2,
+      "departure_time": 52,
+      "table_id": "T3",
+      "group_id": "G2",
+      "queue_name": "Queue B (3-4)",
+      "wait_time": 0,
+      "dining_duration": 45,
+      "wasted_seats": 0
+    },
+    {
+      "time": 5,
+      "departure_time": 30,
+      "table_id": "T2",
+      "group_id": "G3",
+      "queue_name": "Queue A (1-2)",
+      "wait_time": 0,
+      "dining_duration": 20,
+      "wasted_seats": 1
+    },
+    {
+      "time": 52,
+      "departure_time": 92,
+      "table_id": "T3",
+      "group_id": "G4",
+      "queue_name": "Queue B (3-4)",
+      "wait_time": 46,
+      "dining_duration": 35,
+      "wasted_seats": 1
+    }
+  ],
+  "unserved_group_ids": [
+    "G5"
+  ]
+}
