@@ -65,6 +65,29 @@ def _green(text: str) -> str:
     return f"{GREEN}{text}{RESET}" if _supports_color() else text
 
 
+def _group_banner() -> str:
+    banner = "\n".join(
+        [
+            "  ____ ____   ___  _   _ ____    _ ____  ",
+            " / ___|  _ \\ / _ \\| | | |  _ \\  / | ___| ",
+            "| |  _| |_) | | | | | | | |_) | | |___ \\ ",
+            "| |_| |  _ <| |_| | |_| |  __/  | |___) |",
+            " \\____|_| \\_\\\\___/ \\___/|_|     |_|____/ ",
+        ]
+    )
+    if not _supports_color():
+        return banner
+
+    styled_lines = [
+        _blue("  ____ ____   ___  _   _ ____    _ ____  "),
+        _blue(" / ___|  _ \\ / _ \\| | | |  _ \\  / | ___| "),
+        _blue("| |  _| |_) | | | | | | | |_) | | |___ \\ "),
+        _blue("| |_| |  _ <| |_| | |_| |  __/  | |___) |"),
+        _blue(" \\____|_| \\_\\\\___/ \\___/|_|     |_|____/ "),
+    ]
+    return "\n".join(styled_lines)
+
+
 def _discover_input_files() -> tuple[list[Path], list[Path]]:
     settings_paths: list[Path] = []
     arrivals_paths: list[Path] = []
@@ -370,6 +393,7 @@ def main() -> None:
     groups: list[CustomerGroup] = []
     result: SimulationResult | None = None
 
+    print(_group_banner())
     while True:
         _print_status_block(current_setting_path, current_arrivals_path, queue_rules, tables, groups)
         print("1. Load restaurant settings")

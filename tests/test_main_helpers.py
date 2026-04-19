@@ -11,6 +11,7 @@ from main import (
     _discover_input_files,
     _format_comparison_table,
     _format_queue_ranges,
+    _group_banner,
     _resolve_result_save_path,
     _visible_choice_paths,
 )
@@ -73,6 +74,13 @@ class MainHelperTests(unittest.TestCase):
                 visible_paths = _visible_choice_paths([case_path, sample_path])
 
         self.assertEqual(visible_paths, [case_path])
+
+    def test_group_banner_contains_group_15(self) -> None:
+        banner = _group_banner()
+
+        self.assertIn("____ ____", banner)
+        self.assertIn("| |___ \\", banner)
+        self.assertIn("| |___) |", banner)
 
     def test_resolve_result_save_path_uses_results_folder_for_bare_name(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
