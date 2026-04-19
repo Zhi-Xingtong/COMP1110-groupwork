@@ -34,6 +34,7 @@ My contribution in this phase includes:
 7. simplifying result saving so the user can enter only a simple filename and save directly into the `results/` folder
 8. normalizing the case-study settings so the main strategy and seating-layout comparisons use a fairer total seat count of 20
 9. adding an economic-style metric, **revenue per minute**, based on a fixed per-customer spending assumption
+10. adding a `Group 15` startup ASCII banner so the CLI opens with a clearer group identity during demo
 
 ## Detailed contribution record
 
@@ -158,6 +159,17 @@ Completed work:
 
 This helps the project move from a purely operational evaluation toward a more practical efficiency interpretation.
 
+### 9. Demo identity and startup presentation
+
+I also improved the first impression of the CLI by adding a startup banner.
+
+Completed work:
+
+- added a `Group 15` ASCII banner shown when the program starts
+- kept the banner lightweight so it improves demo identity without disrupting the menu workflow
+
+This gives the program a cleaner and more recognizable opening for live presentation.
+
 ## Files showing my contribution in this stage
 
 - `main.py`
@@ -170,7 +182,6 @@ This helps the project move from a purely operational evaluation toward a more p
 - `case_studies\settings_few_large_tables.json`
 - `tests\test_project.py`
 - `tests\test_main_helpers.py`
-- `DEMO_GUIDE.md`
 - `README.md`
 - `ZHAO_ZIHAO_CONTRIBUTION.md`
 
@@ -198,6 +209,7 @@ In particular, I contributed:
 - clearer result presentation
 - fairer 20-seat case-study settings
 - the new revenue-per-minute metric
+- the `Group 15` startup banner
 - the associated testing and integration work
 
 This work directly improves how the project is operated, demonstrated, and evaluated.
