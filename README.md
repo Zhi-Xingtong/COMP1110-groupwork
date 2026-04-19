@@ -92,15 +92,18 @@ python main.py
 ```
 
 3. Choose menu options:
-   - load restaurant settings
-   - load customer arrivals
+   - load restaurant settings from an auto-discovered numbered list, or enter a custom path
+   - load customer arrivals from an auto-discovered numbered list, or enter a custom path
    - run simulation
    - view results
    - save results
+   - compare multiple restaurant settings against one fixed arrival scenario in a CLI table
 
 You can use the sample files in `sample_data/` for a quick demo.
 
 If you need more data for presentation or analysis, use the files in `case_studies/`.
+
+If you need a beginner-friendly explanation of the project goal, menu flow, demo steps, and how to present it, read `DEMO_GUIDE.md`.
 
 ## Data pack for report and demo
 

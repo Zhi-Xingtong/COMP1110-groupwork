@@ -7,7 +7,7 @@ from pathlib import Path
 
 from app.file_io import load_customer_groups, load_restaurant_settings, save_simulation_result
 from app.models import CustomerGroup, QueueRule, Table
-from app.simulator import run_simulation
+from app.simulator import format_result, run_simulation
 
 
 class ProjectTests(unittest.TestCase):
@@ -50,6 +50,17 @@ class ProjectTests(unittest.TestCase):
         self.assertEqual(result.groups_served, 3)
         self.assertEqual(result.served_by_queue["Small"], 3)
 
+    def test_revenue_metrics_are_computed(self) -> None:
+        groups = [
+            CustomerGroup("G1", 0, 2, 10),
+            CustomerGroup("G2", 0, 4, 10),
+        ]
+
+        result = run_simulation("Demo", "Revenue", self.queue_rules, self.tables, groups)
+
+        self.assertEqual(result.spend_per_customer, 50.0)
+        self.assertGreater(result.revenue_per_minute, 0.0)
+
     def test_zero_customers(self) -> None:
         result = run_simulation("Demo", "Empty", self.queue_rules, self.tables, [])
         self.assertEqual(result.total_groups, 0)
@@ -61,6 +72,22 @@ class ProjectTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             run_simulation("Demo", "Too Big", self.queue_rules, self.tables, groups)
 
+    def test_group_larger_than_any_table_can_be_left_unserved_when_allowed(self) -> None:
+        groups = [CustomerGroup("TooBig", 0, 8, 30)]
+
+        result = run_simulation(
+            "Demo",
+            "Too Big",
+            self.queue_rules,
+            self.tables,
+            groups,
+            allow_unserviceable_groups=True,
+        )
+
+        self.assertEqual(result.groups_served, 0)
+        self.assertEqual(result.groups_unserved, 1)
+        self.assertEqual(result.unserved_group_ids, ["TooBig"])
+
     def test_boundary_capacity_match(self) -> None:
         groups = [
             CustomerGroup("G1", 0, 2, 10),
@@ -70,6 +97,22 @@ class ProjectTests(unittest.TestCase):
         seated_tables = {record.group_id: record.table_id for record in result.seating_records}
         self.assertEqual(seated_tables["G1"], "T1")
         self.assertEqual(seated_tables["G2"], "T2")
+
+    def test_format_result_displays_seating_timeline_as_table(self) -> None:
+        groups = [
+            CustomerGroup("G1", 0, 2, 10),
+            CustomerGroup("G2", 0, 4, 10),
+        ]
+        result = run_simulation("Demo", "Boundary", self.queue_rules, self.tables, groups)
+
+        formatted = format_result(result)
+
+        self.assertIn("Seating timeline:", formatted)
+        self.assertIn("Time | Group | Table | Queue", formatted)
+        self.assertIn("----", formatted)
+        self.assertIn("G1", formatted)
+        self.assertIn("T1", formatted)
+        self.assertIn("Revenue per minute", formatted)
 
     def test_error_input_file(self) -> None:
         invalid_path = self.test_output_dir / "invalid.json"

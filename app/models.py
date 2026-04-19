@@ -82,6 +82,8 @@ class SimulationResult:
     table_utilization: float
     seat_utilization: float
     service_level: float
+    spend_per_customer: float
+    revenue_per_minute: float
     average_table_size_gap: float
     reserved_tables: int
     walk_in_tables: int

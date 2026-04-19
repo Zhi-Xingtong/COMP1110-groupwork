@@ -2,11 +2,39 @@ from __future__ import annotations
 
 from collections import defaultdict
 from copy import deepcopy
+import sys
 
 from app.models import CustomerGroup, QueueRule, SeatingRecord, SimulationResult, Table
 
+BLUE = "\033[94m"
+CYAN = "\033[96m"
+RED = "\033[91m"
+RESET = "\033[0m"
+DEFAULT_SPEND_PER_CUSTOMER = 50.0
 
-def validate_inputs(queue_rules: list[QueueRule], tables: list[Table], groups: list[CustomerGroup]) -> None:
+
+def _supports_color() -> bool:
+    return sys.stdout.isatty()
+
+
+def _blue(text: str) -> str:
+    return f"{BLUE}{text}{RESET}" if _supports_color() else text
+
+
+def _cyan(text: str) -> str:
+    return f"{CYAN}{text}{RESET}" if _supports_color() else text
+
+
+def _red(text: str) -> str:
+    return f"{RED}{text}{RESET}" if _supports_color() else text
+
+
+def validate_inputs(
+    queue_rules: list[QueueRule],
+    tables: list[Table],
+    groups: list[CustomerGroup],
+    allow_unserviceable_groups: bool = False,
+) -> None:
     """Validate queue rules, tables, and group records before simulation."""
 
     if not queue_rules:
@@ -49,7 +77,7 @@ def validate_inputs(queue_rules: list[QueueRule], tables: list[Table], groups: l
         seen_group_ids.add(group.group_id)
         if group.group_size <= 0 or group.dining_duration <= 0 or group.arrival_time < 0:
             raise ValueError(f"Group '{group.group_id}' contains invalid values.")
-        if group.group_size > max_capacity:
+        if group.group_size > max_capacity and not allow_unserviceable_groups:
             raise ValueError(
                 f"Group '{group.group_id}' size {group.group_size} exceeds max table capacity {max_capacity}."
             )
@@ -133,14 +161,18 @@ def run_simulation(
     groups: list[CustomerGroup],
     service_threshold: int = 15,
     turnover_duration: int = 0,
+    allow_unserviceable_groups: bool = False,
+    spend_per_customer: float = DEFAULT_SPEND_PER_CUSTOMER,
 ) -> SimulationResult:
     """Run the restaurant queue simulation and return summarized metrics."""
 
-    validate_inputs(queue_rules, tables, groups)
+    validate_inputs(queue_rules, tables, groups, allow_unserviceable_groups=allow_unserviceable_groups)
     if service_threshold < 0:
         raise ValueError("Service threshold cannot be negative.")
     if turnover_duration < 0:
         raise ValueError("Turnover duration cannot be negative.")
+    if spend_per_customer < 0:
+        raise ValueError("Spend per customer cannot be negative.")
 
     tables = deepcopy(tables)
     groups = sorted(deepcopy(groups), key=lambda group: (group.arrival_time, group.group_id))
@@ -211,6 +243,8 @@ def run_simulation(
     used_capacity_time = sum(table.occupied_minutes for table in active_tables)
     total_seat_minutes = total_time * sum(table.capacity for table in active_tables) if total_time else 0
     used_seat_minutes = sum(group.group_size * group.dining_duration for group in served_groups)
+    served_customers = sum(group.group_size for group in served_groups)
+    total_revenue = served_customers * spend_per_customer
 
     average_wait = sum(wait_times) / len(wait_times) if wait_times else 0.0
     service_level = (
@@ -220,6 +254,7 @@ def run_simulation(
     )
     utilization = (used_capacity_time / total_capacity_time * 100) if total_capacity_time else 0.0
     seat_utilization = (used_seat_minutes / total_seat_minutes * 100) if total_seat_minutes else 0.0
+    revenue_per_minute = (total_revenue / total_time) if total_time else 0.0
     average_wait_by_queue = {
         name: (sum(values) / len(values) if values else 0.0)
         for name, values in waits_by_queue.items()
@@ -236,6 +271,8 @@ def run_simulation(
         table_utilization=utilization,
         seat_utilization=seat_utilization,
         service_level=service_level,
+        spend_per_customer=spend_per_customer,
+        revenue_per_minute=revenue_per_minute,
         average_table_size_gap=(sum(size_gaps) / len(size_gaps) if size_gaps else 0.0),
         reserved_tables=sum(1 for table in tables if table.reserved),
         walk_in_tables=len(active_tables),
@@ -252,45 +289,88 @@ def run_simulation(
 def format_result(result: SimulationResult) -> str:
     """Build a readable multi-line report for console output."""
 
-    lines = [
-        f"Restaurant: {result.restaurant_name}",
-        f"Scenario: {result.scenario_name}",
-        f"Groups served: {result.groups_served}/{result.total_groups}",
-        f"Groups unserved: {result.groups_unserved}",
-        f"Average wait time: {result.average_wait_time:.2f} minutes",
-        f"Max wait time: {result.max_wait_time} minutes",
-        f"Table utilization (unavailable tables): {result.table_utilization:.2f}%",
-        f"Seat utilization (used seats): {result.seat_utilization:.2f}%",
-        f"Service level (<={result.service_threshold} min): {result.service_level:.2f}%",
-        f"Average wasted seats per seating: {result.average_table_size_gap:.2f}",
-        f"Turnover duration: {result.turnover_duration} minutes",
-        f"Walk-in tables used: {result.walk_in_tables}",
-        f"Reserved tables withheld: {result.reserved_tables}",
-        "Max queue lengths:",
+    def format_plain_table(headers: list[str], rows: list[list[str]]) -> list[str]:
+        table_rows = [headers] + rows
+        column_widths = [
+            max(len(str(row[column_index])) for row in table_rows) for column_index in range(len(headers))
+        ]
+
+        def format_row(row: list[str]) -> str:
+            return " | ".join(
+                str(cell).ljust(column_widths[column_index]) for column_index, cell in enumerate(row)
+            )
+
+        separator = "-+-".join("-" * width for width in column_widths)
+        return [format_row(headers), separator] + [format_row(row) for row in rows]
+
+    def format_summary_lines(items: list[tuple[str, str, str]]) -> list[str]:
+        label_width = max(len(label) for label, _, _ in items)
+        rendered_lines: list[str] = []
+        for label, value, style in items:
+            if style == "number":
+                rendered_value = _cyan(value)
+            elif style == "warning":
+                rendered_value = _red(value)
+            else:
+                rendered_value = value
+            rendered_lines.append(f"{label.ljust(label_width)} : {rendered_value}")
+        return rendered_lines
+
+    summary_items = [
+        ("Restaurant", result.restaurant_name, "plain"),
+        ("Scenario", result.scenario_name, "plain"),
+        ("Groups served", f"{result.groups_served}/{result.total_groups}", "number"),
+        (
+            "Groups unserved",
+            str(result.groups_unserved),
+            "warning" if result.groups_unserved > 0 else "number",
+        ),
+        ("Average wait time", f"{result.average_wait_time:.2f} minutes", "number"),
+        ("Max wait time", f"{result.max_wait_time} minutes", "number"),
+        ("Table utilization", f"{result.table_utilization:.2f}%", "number"),
+        ("Seat utilization", f"{result.seat_utilization:.2f}%", "number"),
+        ("Service level", f"{result.service_level:.2f}% (<= {result.service_threshold} min)", "number"),
+        ("Revenue per minute", f"{result.revenue_per_minute:.2f} @ {result.spend_per_customer:.0f}/customer", "number"),
+        ("Average wasted seats", f"{result.average_table_size_gap:.2f}", "number"),
+        ("Turnover duration", f"{result.turnover_duration} minutes", "number"),
+        ("Walk-in tables used", str(result.walk_in_tables), "number"),
+        ("Reserved tables", str(result.reserved_tables), "number"),
     ]
+
+    lines = [_blue("Summary"), _blue("-------"), *format_summary_lines(summary_items), _blue("Max queue lengths:")]
     lines.extend(
-        f"  - {queue_name}: {queue_length}"
+        f"  - {queue_name.ljust(max(len(name) for name in result.max_queue_lengths))} : {_cyan(str(queue_length))}"
         for queue_name, queue_length in result.max_queue_lengths.items()
     )
-    lines.append("Seating timeline:")
+    lines.append(_blue("Seating timeline:"))
     if result.seating_records:
         lines.extend(
-            "  - "
-            f"t={record.time}: group {record.group_id} seated at {record.table_id} "
-            f"from queue {record.queue_name} after waiting {record.wait_time} min; "
-            f"departure at t={record.departure_time}; wasted seats={record.wasted_seats}"
-            for record in result.seating_records
+            format_plain_table(
+                ["Time", "Group", "Table", "Queue", "Wait", "Depart", "Wasted"],
+                [
+                    [
+                        str(record.time),
+                        record.group_id,
+                        record.table_id,
+                        record.queue_name,
+                        str(record.wait_time),
+                        str(record.departure_time),
+                        str(record.wasted_seats),
+                    ]
+                    for record in result.seating_records
+                ],
+            )
         )
     else:
-        lines.append("  - No groups were seated.")
+        lines.append("No groups were seated.")
 
     if result.unserved_group_ids:
-        lines.append("Unserved groups: " + ", ".join(result.unserved_group_ids))
-    lines.append("Queue performance:")
+        lines.append("Unserved groups: " + _red(", ".join(result.unserved_group_ids)))
+    lines.append(_blue("Queue performance:"))
     lines.extend(
         "  - "
-        f"{queue_name}: served {result.served_by_queue[queue_name]}, "
-        f"avg wait {result.average_wait_by_queue[queue_name]:.2f} min"
+        f"{queue_name}: served {_cyan(str(result.served_by_queue[queue_name]))}, "
+        f"avg wait {_cyan(f'{result.average_wait_by_queue[queue_name]:.2f} min')}"
         for queue_name in result.max_queue_lengths
     )
     return "\n".join(lines)

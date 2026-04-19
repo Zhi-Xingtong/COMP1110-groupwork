@@ -22,7 +22,7 @@
     },
     {
       "table_id": "T3",
-      "capacity": 4,
+      "capacity": 2,
       "reserved": false
     },
     {
@@ -32,6 +32,11 @@
     },
     {
       "table_id": "T5",
+      "capacity": 4,
+      "reserved": false
+    },
+    {
+      "table_id": "T6",
       "capacity": 6,
       "reserved": false
     }
