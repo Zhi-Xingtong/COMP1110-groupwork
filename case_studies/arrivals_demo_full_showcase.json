@@ -1,0 +1,21 @@
+{
+  "scenario_name": "Demo Full Showcase Mix",
+  "groups": [
+    { "group_id": "D01", "arrival_time": 0, "group_size": 2, "dining_duration": 28 },
+    { "group_id": "D02", "arrival_time": 2, "group_size": 4, "dining_duration": 45 },
+    { "group_id": "D03", "arrival_time": 4, "group_size": 1, "dining_duration": 20 },
+    { "group_id": "D04", "arrival_time": 6, "group_size": 3, "dining_duration": 36 },
+    { "group_id": "D05", "arrival_time": 8, "group_size": 2, "dining_duration": 30 },
+    { "group_id": "D06", "arrival_time": 10, "group_size": 4, "dining_duration": 48 },
+    { "group_id": "D07", "arrival_time": 12, "group_size": 1, "dining_duration": 20 },
+    { "group_id": "D08", "arrival_time": 14, "group_size": 3, "dining_duration": 34 },
+    { "group_id": "D09", "arrival_time": 35, "group_size": 2, "dining_duration": 28 },
+    { "group_id": "D10", "arrival_time": 37, "group_size": 4, "dining_duration": 44 },
+    { "group_id": "D11", "arrival_time": 39, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "D12", "arrival_time": 41, "group_size": 3, "dining_duration": 36 },
+    { "group_id": "D13", "arrival_time": 43, "group_size": 2, "dining_duration": 30 },
+    { "group_id": "D14", "arrival_time": 45, "group_size": 4, "dining_duration": 46 },
+    { "group_id": "D15", "arrival_time": 47, "group_size": 1, "dining_duration": 20 },
+    { "group_id": "D16", "arrival_time": 49, "group_size": 3, "dining_duration": 34 }
+  ]
+}

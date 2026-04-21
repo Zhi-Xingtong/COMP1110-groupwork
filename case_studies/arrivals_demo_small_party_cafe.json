@@ -1,0 +1,21 @@
+{
+  "scenario_name": "Demo Small Party Cafe Rush",
+  "groups": [
+    { "group_id": "S01", "arrival_time": 0, "group_size": 1, "dining_duration": 20 },
+    { "group_id": "S02", "arrival_time": 2, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "S03", "arrival_time": 4, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "S04", "arrival_time": 6, "group_size": 2, "dining_duration": 26 },
+    { "group_id": "S05", "arrival_time": 8, "group_size": 1, "dining_duration": 20 },
+    { "group_id": "S06", "arrival_time": 10, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "S07", "arrival_time": 12, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "S08", "arrival_time": 14, "group_size": 2, "dining_duration": 26 },
+    { "group_id": "S09", "arrival_time": 16, "group_size": 1, "dining_duration": 20 },
+    { "group_id": "S10", "arrival_time": 18, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "S11", "arrival_time": 20, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "S12", "arrival_time": 22, "group_size": 2, "dining_duration": 26 },
+    { "group_id": "S13", "arrival_time": 24, "group_size": 1, "dining_duration": 20 },
+    { "group_id": "S14", "arrival_time": 26, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "S15", "arrival_time": 28, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "S16", "arrival_time": 30, "group_size": 2, "dining_duration": 26 }
+  ]
+}
