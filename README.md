@@ -1,64 +1,136 @@
-# COMP1110 Topic C Restaurant Queue Simulation
+# COMP1110 Topic C: Restaurant Queue Simulation
 
-This project simulates restaurant queue strategies using a text-based Python program. It models customer arrivals, queue assignment, seating decisions, table turnover, and performance metrics so the group can compare different queue-management strategies under controlled scenarios.
+We built a text-based Python simulation for **Topic C: Restaurant Queue Simulation**. Our program models how customer groups arrive, join queues, wait for suitable tables, and get seated. We then report performance metrics so different queue strategies and table layouts can be compared with the same customer-arrival scenario.
 
-## Project overview
+## Project Scope
 
-The system focuses on a size-based queue model with these main assumptions:
+We focus on a simplified restaurant operation model.
 
-- no table sharing
-- no table combining
-- strict FCFS within each queue
-- no walk-aways
-- fixed dining duration
-- optional fixed turnover time
-- optional reserved tables excluded from walk-in seating
+We model:
 
-The simulation is event-driven. Instead of moving minute by minute, the clock jumps to the next arrival or the next table becoming available.
+- customer groups with arrival time, group size, and dining duration
+- restaurant tables with fixed capacities
+- one or more queues based on group-size ranges
+- first-come-first-served processing within each queue
+- table turnover or cleaning time
+- reserved tables that can be excluded from walk-in seating
+- performance metrics for case-study comparison
 
-## File list
+## Main Assumptions
+
+- Each group must be seated at one table that has enough capacity.
+- A table can serve only one group at a time.
+- Groups do not share tables with strangers.
+- Tables cannot be combined.
+- Groups wait until they are seated.
+- Dining duration and turnover duration are fixed input values.
+- Our simulation clock jumps between events, such as arrivals and table departures.
+- We use static input files and text-based interaction rather than live restaurant data or a graphical interface.
+
+## File Structure
 
 - `main.py`
-  text menu for loading files, running the simulation, viewing results, and saving results
+  Our main text-menu program. Use this file to run the project.
 - `app/models.py`
-  shared data structures for queues, groups, tables, seating records, and simulation results
+  Our data classes for queue rules, customer groups, tables, seating records, and simulation results.
 - `app/simulator.py`
-  core simulation engine, validation, metrics computation, and formatted console output
+  Our core simulation engine, validation, seating logic, metric calculation, and formatted result output.
 - `app/file_io.py`
-  JSON loading and saving functions for restaurant settings, customer arrivals, and results
-- `sample_data/restaurant_settings.json`
-  example restaurant configuration
-- `sample_data/customer_arrivals.json`
-  example scenario input
+  Our JSON loading and saving functions for restaurant settings, customer arrivals, and simulation results.
+- `sample_data/`
+  Small example files for quick testing.
 - `case_studies/`
-  richer scenario data pack for comparison, demo, and report writing
-- `tests/test_project.py`
-  automated test cases for core project requirements
-- `WU_HANLIN_CONTRIBUTION.md`
-  clear record of Wu Hanlin's coding contribution
+  Larger scenario data pack for final demo, report analysis, and strategy comparison.
+- `tests/`
+  Automated unit tests.
+- `*_CONTRIBUTION.md`
+  Our individual contribution records.
 
-## JSON format
+## How to Run
 
-### Restaurant settings JSON
+Open a terminal in the project folder and run:
+
+```bash
+python main.py
+```
+
+Our menu provides these main actions:
+
+- load restaurant settings
+- load customer arrivals
+- run simulation
+- view results
+- save results as JSON
+- compare multiple restaurant settings with one arrival scenario
+- exit
+
+## Recommended Quick Demo
+
+For a simple single-run demo:
+
+1. Run `python main.py`.
+2. Choose `Load restaurant settings`.
+3. Select `size based`.
+4. Choose `Load customer arrivals`.
+5. Select `demo full showcase`.
+6. Choose `Run simulation`.
+7. Choose `View results`.
+
+For a strategy-comparison demo:
+
+1. Run `python main.py`.
+2. Choose `Compare settings`.
+3. Select one arrival scenario, such as `demo full showcase` or `demo turnover pressure`.
+4. Select multiple settings, such as `single queue`, `coarse queue`, and `size based`.
+5. Read the comparison table.
+
+Recommended comparison pairs:
+
+- `single queue` vs `size based`
+  We use this pair to show the benefit of size-based queue assignment.
+- `coarse queue` vs `size based`
+  We use this pair to show the effect of queue granularity.
+- `many small tables` vs `few large tables`
+  We use this pair to show how table layout affects different demand patterns.
+
+## Input File Formats
+
+### Restaurant Settings JSON
+
+Our restaurant setting files define the queue strategy, service threshold, turnover time, and table layout.
+
+Example:
 
 ```json
 {
-  "restaurant_name": "Group 15 Demo Restaurant",
+  "restaurant_name": "Example Restaurant",
   "service_threshold": 15,
   "turnover_duration": 5,
   "queues": [
     { "name": "Queue A (1-2)", "min_size": 1, "max_size": 2 },
     { "name": "Queue B (3-4)", "min_size": 3, "max_size": 4 },
-    { "name": "Queue C (5+)", "min_size": 5, "max_size": null }
+    { "name": "Queue C (5+)", "min_size": 5, "max_size": 6 }
   ],
   "tables": [
     { "table_id": "T1", "capacity": 2, "reserved": false },
-    { "table_id": "T2", "capacity": 4, "reserved": false }
+    { "table_id": "T2", "capacity": 4, "reserved": false },
+    { "table_id": "T3", "capacity": 6, "reserved": false }
   ]
 }
 ```
 
-### Customer arrivals JSON
+Notes:
+
+- `service_threshold` is used to calculate service level.
+- `turnover_duration` is the cleaning or reset time after dining.
+- `reserved: true` means the table is not used for walk-in seating.
+- `max_size: null` can be used for an open-ended queue range.
+
+### Customer Arrivals JSON
+
+Our arrival files define one customer-arrival scenario.
+
+Example:
 
 ```json
 {
@@ -70,77 +142,90 @@ The simulation is event-driven. Instead of moving minute by minute, the clock ju
 }
 ```
 
-### Results JSON
+Notes:
 
-After running the simulation, the program can save a results JSON containing summary metrics and the seating timeline, including:
+- Time is measured in minutes from the start of the simulation.
+- `arrival_time` is when the group joins the system.
+- `dining_duration` does not include turnover time.
 
-- average and maximum wait time
+## Output Metrics
+
+After a simulation run, our program reports:
+
 - groups served and unserved
-- queue performance
+- average wait time
+- maximum wait time
+- maximum queue length per queue
 - table utilization
 - seat utilization
 - service level
-- seating records
+- average wasted seats per seating
+- queue-level average wait time
+- revenue per minute based on a fixed spending assumption
+- seating timeline
 
-## How to run
+We can also save results as JSON from the menu.
 
-1. Open a terminal in the project folder.
-2. Run:
+## Case Study Data
 
-```bash
-python main.py
-```
+Our `case_studies/` folder contains restaurant settings and arrival scenarios for final analysis.
 
-3. Choose menu options:
-   - load restaurant settings from an auto-discovered numbered list, or enter a custom path
-   - load customer arrivals from an auto-discovered numbered list, or enter a custom path
-   - run simulation
-   - view results
-   - save results
-   - compare multiple restaurant settings against one fixed arrival scenario in a CLI table
+Our restaurant setting files:
 
-You can use the sample files in `sample_data/` for a quick demo.
+- `settings_single_queue.json`
+- `settings_size_based.json`
+- `settings_coarse_queue.json`
+- `settings_many_small_tables.json`
+- `settings_few_large_tables.json`
 
-If you need more data for presentation or analysis, use the files in `case_studies/`.
+Original arrival scenarios:
 
-If you need a beginner-friendly explanation of the project goal, menu flow, demo steps, and how to present it, read `DEMO_GUIDE.md`.
+- `arrivals_peak_hour.json`
+- `arrivals_low_traffic.json`
+- `arrivals_uniform_small.json`
+- `arrivals_uniform_large.json`
 
-## Data pack for report and demo
+Demo-friendly arrival scenarios:
 
-The `case_studies/` folder now contains:
+- `arrivals_demo_balanced_steady.json`
+- `arrivals_demo_quiet_afternoon.json`
+- `arrivals_demo_small_party_cafe.json`
+- `arrivals_demo_family_dinner.json`
+- `arrivals_demo_two_waves.json`
+- `arrivals_demo_queue_blocking.json`
+- `arrivals_demo_turnover_pressure.json`
+- `arrivals_demo_full_showcase.json`
 
-- 5 restaurant setting files
-- 4 arrival scenario files
-- 20 customer groups in each case-study arrival file
-- suggested pairings for comparing queue strategies and table layouts
+We designed the demo-friendly files to show our algorithm working across different situations while avoiding unrealistic failure cases.
 
-This makes the codebase more useful for final demo, report writing, and contribution evidence.
+## How to Test
 
-## How to test
-
-Run:
+Run all automated tests with:
 
 ```bash
 python -m unittest discover -s tests -p "test_*.py"
 ```
 
-The automated tests cover:
+Our tests cover:
 
-- normal operation
-- all same group size
-- zero customers
-- group larger than any table
-- boundary capacity match
-- invalid input file
+- normal simulation operation
+- same-size groups
+- zero-customer input
+- group too large for any table
+- capacity boundary cases
+- revenue metric calculation
+- formatted result output
+- invalid JSON input handling
 - JSON load/save integration
-- case-study dataset loading and simulation runs
+- case-study file loading and simulation
+- helper functions used by the text menu
 
-## Contribution note
+## Contribution Files
 
-According to the project plan, Wu Hanlin is responsible for:
+We provide individual contribution records in:
 
-- `C2` File I/O
-- `C5` Text menu, README, GitHub support materials
-- `C6` Test cases
+- `WU_HANLIN_CONTRIBUTION.md`
+- `ZHAO_ZIHAO_CONTRIBUTION.md`
+- `ZHI_XINGTONG_CONTRIBUTION.md`
 
-That work is implemented in this version and documented in `WU_HANLIN_CONTRIBUTION.md`.
+These files explain our coding contributions and the files most closely related to each member's work.

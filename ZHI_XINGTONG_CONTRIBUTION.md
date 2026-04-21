@@ -24,6 +24,7 @@ My work focuses on:
 - computing the key performance metrics required for evaluation
 - producing clear simulation results for case-study comparison
 - adding demo-friendly arrival data that shows the algorithm working well across different situations
+- refining the main README so the final project can be tested and understood by professors and TAs
 
 ## Problem statement for my coding contribution
 
@@ -121,6 +122,12 @@ These scenarios cover:
 
 The new demo scenarios are controlled so they can be served by the existing restaurant settings and can better demonstrate that the algorithm works.
 
+## README refinement
+
+I also helped refine the main `README.md` for final submission.
+
+This makes the repository easier for external readers to evaluate without needing extra explanation from group members.
+
 ## Files that clearly show my contribution
 
 - `app/models.py`
@@ -133,6 +140,7 @@ The new demo scenarios are controlled so they can be served by the existing rest
 - `case_studies/arrivals_demo_queue_blocking.json`
 - `case_studies/arrivals_demo_turnover_pressure.json`
 - `case_studies/arrivals_demo_full_showcase.json`
+- `README.md`
 - `ZHI_XINGTONG_CONTRIBUTION.md`
 
 ## How my part connects with teammates' work
@@ -157,5 +165,6 @@ My contribution provides the main computational foundation of the project:
 - `C3` runs the restaurant queue simulation
 - `C4` computes the evaluation metrics
 - additional demo data supports clearer final case-study comparisons
+- the final README helps professors and TAs understand, run, and test the project
 
 Together, these parts make it possible for the whole project to produce meaningful, repeatable, and explainable simulation results.
