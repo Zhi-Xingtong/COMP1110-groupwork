@@ -23,7 +23,7 @@ My work focuses on:
 - applying the project assumptions consistently
 - computing the key performance metrics required for evaluation
 - producing clear simulation results for case-study comparison
-- adding demo-friendly arrival data that shows the algorithm working well across different situations
+- adding paired case-study data that varies exactly one factor per pair
 - refining the main README so the final project can be tested and understood by professors and TAs
 
 ## Problem statement for my coding contribution
@@ -96,31 +96,27 @@ These metrics allow the group to compare queue strategies and table layouts usin
 
 ## Case-study data support
 
-I also added additional demo-friendly arrival scenarios in `case_studies/`.
+I also helped restructure the case-study data in `case_studies/` into paired scenarios.
 
-These files are designed to show the simulation working well across a wider range of situations without creating misleading failure cases:
+These files are designed to match the project requirement that each pair varies exactly one factor while using the same customer arrival pattern:
 
-- `case_studies/arrivals_demo_balanced_steady.json`
-- `case_studies/arrivals_demo_quiet_afternoon.json`
-- `case_studies/arrivals_demo_small_party_cafe.json`
-- `case_studies/arrivals_demo_family_dinner.json`
-- `case_studies/arrivals_demo_two_waves.json`
-- `case_studies/arrivals_demo_queue_blocking.json`
-- `case_studies/arrivals_demo_turnover_pressure.json`
-- `case_studies/arrivals_demo_full_showcase.json`
+- Pair 01 compares single queue and size-based queues.
+- Pair 02 compares coarse queues and fine-grained queues.
+- Pair 03 compares many small tables and fewer large tables.
+- Pair 04 compares balanced table mix and family-oriented table mix.
+- Pair 05 compares no reserved tables and one reserved table.
+- Pair 06 compares short turnover time and long turnover time.
 
-These scenarios cover:
+The paired scenarios cover:
 
-- quiet low-traffic operation
-- balanced steady arrivals
-- small-party cafe rush
-- family dinner groups
-- two separate arrival waves
-- single-queue blocking behavior
-- turnover-pressure situations
-- a mixed showcase scenario for final demo use
+- queue strategy
+- queue granularity
+- table size distribution
+- table mix for family groups
+- reserved capacity
+- turnover duration
 
-The new demo scenarios are controlled so they can be served by the existing restaurant settings and can better demonstrate that the algorithm works.
+The paired scenarios are controlled so the comparison within each pair is fair and easy to explain.
 
 ## README refinement
 
@@ -132,14 +128,24 @@ This makes the repository easier for external readers to evaluate without needin
 
 - `app/models.py`
 - `app/simulator.py`
-- `case_studies/arrivals_demo_balanced_steady.json`
-- `case_studies/arrivals_demo_quiet_afternoon.json`
-- `case_studies/arrivals_demo_small_party_cafe.json`
-- `case_studies/arrivals_demo_family_dinner.json`
-- `case_studies/arrivals_demo_two_waves.json`
-- `case_studies/arrivals_demo_queue_blocking.json`
-- `case_studies/arrivals_demo_turnover_pressure.json`
-- `case_studies/arrivals_demo_full_showcase.json`
+- `case_studies/pair01_arrivals_mixed_peak.json`
+- `case_studies/pair01a_settings_single_queue.json`
+- `case_studies/pair01b_settings_size_based.json`
+- `case_studies/pair02_arrivals_granularity_test.json`
+- `case_studies/pair02a_settings_coarse_queues.json`
+- `case_studies/pair02b_settings_fine_queues.json`
+- `case_studies/pair03_arrivals_small_party_rush.json`
+- `case_studies/pair03a_settings_many_small_tables.json`
+- `case_studies/pair03b_settings_few_large_tables.json`
+- `case_studies/pair04_arrivals_family_groups.json`
+- `case_studies/pair04a_settings_balanced_table_mix.json`
+- `case_studies/pair04b_settings_family_table_mix.json`
+- `case_studies/pair05_arrivals_reservation_pressure.json`
+- `case_studies/pair05a_settings_no_reserved_tables.json`
+- `case_studies/pair05b_settings_one_reserved_table.json`
+- `case_studies/pair06_arrivals_turnover_test.json`
+- `case_studies/pair06a_settings_short_turnover.json`
+- `case_studies/pair06b_settings_long_turnover.json`
 - `README.md`
 - `ZHI_XINGTONG_CONTRIBUTION.md`
 
@@ -164,7 +170,7 @@ My contribution provides the main computational foundation of the project:
 - `C1` defines the data structures
 - `C3` runs the restaurant queue simulation
 - `C4` computes the evaluation metrics
-- additional demo data supports clearer final case-study comparisons
+- paired case-study data supports clearer final case-study comparisons
 - the final README helps professors and TAs understand, run, and test the project
 
 Together, these parts make it possible for the whole project to produce meaningful, repeatable, and explainable simulation results.

@@ -1,0 +1,17 @@
+{
+  "scenario_name": "Pair 03 Small Party Rush",
+  "groups": [
+    { "group_id": "P03-01", "arrival_time": 0, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "P03-02", "arrival_time": 2, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "P03-03", "arrival_time": 4, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "P03-04", "arrival_time": 6, "group_size": 2, "dining_duration": 25 },
+    { "group_id": "P03-05", "arrival_time": 8, "group_size": 1, "dining_duration": 20 },
+    { "group_id": "P03-06", "arrival_time": 10, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "P03-07", "arrival_time": 12, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "P03-08", "arrival_time": 14, "group_size": 2, "dining_duration": 26 },
+    { "group_id": "P03-09", "arrival_time": 16, "group_size": 1, "dining_duration": 20 },
+    { "group_id": "P03-10", "arrival_time": 18, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "P03-11", "arrival_time": 20, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "P03-12", "arrival_time": 22, "group_size": 2, "dining_duration": 26 }
+  ]
+}

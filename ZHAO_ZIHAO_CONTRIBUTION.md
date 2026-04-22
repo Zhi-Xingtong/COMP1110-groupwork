@@ -49,7 +49,7 @@ Completed work:
 - changed the old path-only workflow into a numbered selection workflow
 - kept manual path entry as a fallback for new files
 - removed `sample_data/` entries from the main menu list so the live demo focuses on the formal case-study files
-- simplified file labels in the menu into human-readable names such as `coarse queue`, `few large tables`, `peak hour`, and `uniform large`
+- simplified file labels in the menu into human-readable names such as `pair01a single queue`, `pair01b size based`, and `pair06 turnover test`
 
 This change makes the program much easier to operate in front of a tutor or class audience.
 
@@ -175,11 +175,18 @@ This gives the program a cleaner and more recognizable opening for live presenta
 - `main.py`
 - `app\simulator.py`
 - `app\models.py`
-- `case_studies\settings_coarse_queue.json`
-- `case_studies\settings_single_queue.json`
-- `case_studies\settings_size_based.json`
-- `case_studies\settings_many_small_tables.json`
-- `case_studies\settings_few_large_tables.json`
+- `case_studies\pair01a_settings_single_queue.json`
+- `case_studies\pair01b_settings_size_based.json`
+- `case_studies\pair02a_settings_coarse_queues.json`
+- `case_studies\pair02b_settings_fine_queues.json`
+- `case_studies\pair03a_settings_many_small_tables.json`
+- `case_studies\pair03b_settings_few_large_tables.json`
+- `case_studies\pair04a_settings_balanced_table_mix.json`
+- `case_studies\pair04b_settings_family_table_mix.json`
+- `case_studies\pair05a_settings_no_reserved_tables.json`
+- `case_studies\pair05b_settings_one_reserved_table.json`
+- `case_studies\pair06a_settings_short_turnover.json`
+- `case_studies\pair06b_settings_long_turnover.json`
 - `tests\test_project.py`
 - `tests\test_main_helpers.py`
 - `README.md`

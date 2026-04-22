@@ -1,0 +1,17 @@
+{
+  "restaurant_name": "Pair 02A - Coarse Queues",
+  "service_threshold": 15,
+  "turnover_duration": 5,
+  "queues": [
+    { "name": "Queue A (1-4)", "min_size": 1, "max_size": 4 },
+    { "name": "Queue B (5-6)", "min_size": 5, "max_size": 6 }
+  ],
+  "tables": [
+    { "table_id": "T1", "capacity": 2, "reserved": false },
+    { "table_id": "T2", "capacity": 2, "reserved": false },
+    { "table_id": "T3", "capacity": 2, "reserved": false },
+    { "table_id": "T4", "capacity": 4, "reserved": false },
+    { "table_id": "T5", "capacity": 4, "reserved": false },
+    { "table_id": "T6", "capacity": 6, "reserved": false }
+  ]
+}

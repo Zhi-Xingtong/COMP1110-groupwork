@@ -178,12 +178,18 @@ class ProjectTests(unittest.TestCase):
 
     def test_case_study_files_load_and_run(self) -> None:
         valid_pairs = [
-            ("case_studies/settings_single_queue.json", "case_studies/arrivals_peak_hour.json"),
-            ("case_studies/settings_size_based.json", "case_studies/arrivals_peak_hour.json"),
-            ("case_studies/settings_coarse_queue.json", "case_studies/arrivals_peak_hour.json"),
-            ("case_studies/settings_size_based.json", "case_studies/arrivals_low_traffic.json"),
-            ("case_studies/settings_many_small_tables.json", "case_studies/arrivals_uniform_small.json"),
-            ("case_studies/settings_few_large_tables.json", "case_studies/arrivals_uniform_large.json"),
+            ("case_studies/pair01a_settings_single_queue.json", "case_studies/pair01_arrivals_mixed_peak.json"),
+            ("case_studies/pair01b_settings_size_based.json", "case_studies/pair01_arrivals_mixed_peak.json"),
+            ("case_studies/pair02a_settings_coarse_queues.json", "case_studies/pair02_arrivals_granularity_test.json"),
+            ("case_studies/pair02b_settings_fine_queues.json", "case_studies/pair02_arrivals_granularity_test.json"),
+            ("case_studies/pair03a_settings_many_small_tables.json", "case_studies/pair03_arrivals_small_party_rush.json"),
+            ("case_studies/pair03b_settings_few_large_tables.json", "case_studies/pair03_arrivals_small_party_rush.json"),
+            ("case_studies/pair04a_settings_balanced_table_mix.json", "case_studies/pair04_arrivals_family_groups.json"),
+            ("case_studies/pair04b_settings_family_table_mix.json", "case_studies/pair04_arrivals_family_groups.json"),
+            ("case_studies/pair05a_settings_no_reserved_tables.json", "case_studies/pair05_arrivals_reservation_pressure.json"),
+            ("case_studies/pair05b_settings_one_reserved_table.json", "case_studies/pair05_arrivals_reservation_pressure.json"),
+            ("case_studies/pair06a_settings_short_turnover.json", "case_studies/pair06_arrivals_turnover_test.json"),
+            ("case_studies/pair06b_settings_long_turnover.json", "case_studies/pair06_arrivals_turnover_test.json"),
         ]
 
         for settings_path, arrivals_path in valid_pairs:
@@ -203,7 +209,7 @@ class ProjectTests(unittest.TestCase):
                 service_threshold=service_threshold,
                 turnover_duration=turnover_duration,
             )
-            self.assertEqual(result.total_groups, 20)
+            self.assertGreater(result.total_groups, 0)
             self.assertGreaterEqual(result.groups_served, 0)
             self.assertGreaterEqual(len(result.seating_records), 0)
 

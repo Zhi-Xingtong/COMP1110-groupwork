@@ -1,0 +1,17 @@
+{
+  "scenario_name": "Pair 01 Mixed Peak Arrivals",
+  "groups": [
+    { "group_id": "P01-01", "arrival_time": 0, "group_size": 4, "dining_duration": 48 },
+    { "group_id": "P01-02", "arrival_time": 1, "group_size": 4, "dining_duration": 46 },
+    { "group_id": "P01-03", "arrival_time": 2, "group_size": 4, "dining_duration": 45 },
+    { "group_id": "P01-04", "arrival_time": 3, "group_size": 4, "dining_duration": 44 },
+    { "group_id": "P01-05", "arrival_time": 4, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "P01-06", "arrival_time": 5, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "P01-07", "arrival_time": 6, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "P01-08", "arrival_time": 7, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "P01-09", "arrival_time": 8, "group_size": 1, "dining_duration": 20 },
+    { "group_id": "P01-10", "arrival_time": 9, "group_size": 2, "dining_duration": 26 },
+    { "group_id": "P01-11", "arrival_time": 10, "group_size": 3, "dining_duration": 34 },
+    { "group_id": "P01-12", "arrival_time": 11, "group_size": 2, "dining_duration": 26 }
+  ]
+}

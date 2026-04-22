@@ -1,40 +1,137 @@
-# Case Study Data Pack
+# Paired Case Study Data Pack
 
-This folder provides richer input data for scenario comparison and demo use.
+This folder contains 6 paired scenarios for the restaurant queue simulation.
 
-## Included settings files
+Each pair follows the same design rule:
 
-- `settings_single_queue.json`
-  baseline single FCFS queue
-- `settings_size_based.json`
-  fine-grained size-based queue design
-- `settings_coarse_queue.json`
-  coarse queue grouping (`1-4` and `5+`)
-- `settings_many_small_tables.json`
-  more small tables
-- `settings_few_large_tables.json`
-  fewer but larger tables
+- both variations use the same customer arrival file
+- only one factor changes between variation A and variation B
+- all files use the JSON format required by the program
+- the pair is intended to reveal a clear operational trade-off
 
-## Included arrival files
+## Pair 01: Number of Queues / Queue Strategy
 
-- `arrivals_peak_hour.json`
-  20 mixed groups during a heavy rush
-- `arrivals_low_traffic.json`
-  20 mixed groups with larger arrival gaps
-- `arrivals_uniform_small.json`
-  20 small groups
-- `arrivals_uniform_large.json`
-  20 large groups
+Arrival file:
 
-## Suggested pairings
+- `pair01_arrivals_mixed_peak.json`
 
-1. `settings_single_queue.json` vs `settings_size_based.json`
-   Use the same `arrivals_peak_hour.json` to compare fairness and utilization.
-2. `settings_coarse_queue.json` vs `settings_size_based.json`
-   Use the same `arrivals_peak_hour.json` to compare coarse vs fine queue granularity.
-3. `settings_many_small_tables.json` vs `settings_few_large_tables.json`
-   Use the same `arrivals_peak_hour.json` or `arrivals_uniform_large.json` to compare table layouts.
-4. `arrivals_low_traffic.json` vs `arrivals_peak_hour.json`
-   Use the same `settings_size_based.json` to compare low traffic and peak hour demand.
+Variations:
 
-These files were added to make the codebase easier to demonstrate, test, and discuss in the final submission.
+- `pair01a_settings_single_queue.json`
+- `pair01b_settings_size_based.json`
+
+Changed factor:
+
+- single FCFS queue vs size-based queues
+
+Purpose:
+
+- shows how a single queue can block small groups behind larger groups
+- shows how size-based queues can reduce waiting for eligible small groups
+
+## Pair 02: Queue Granularity
+
+Arrival file:
+
+- `pair02_arrivals_granularity_test.json`
+
+Variations:
+
+- `pair02a_settings_coarse_queues.json`
+- `pair02b_settings_fine_queues.json`
+
+Changed factor:
+
+- coarse queues (`1-4`, `5-6`) vs fine queues (`1-2`, `3-4`, `5-6`)
+
+Purpose:
+
+- shows the trade-off between simpler queue management and more precise group-size matching
+
+## Pair 03: Table Size Distribution for Small Parties
+
+Arrival file:
+
+- `pair03_arrivals_small_party_rush.json`
+
+Variations:
+
+- `pair03a_settings_many_small_tables.json`
+- `pair03b_settings_few_large_tables.json`
+
+Changed factor:
+
+- many small tables vs fewer large tables
+
+Purpose:
+
+- shows that small-party demand benefits from more small tables
+- shows that large tables can create seat waste when most customers are groups of 1-2
+
+## Pair 04: Table Mix for Family Groups
+
+Arrival file:
+
+- `pair04_arrivals_family_groups.json`
+
+Variations:
+
+- `pair04a_settings_balanced_table_mix.json`
+- `pair04b_settings_family_table_mix.json`
+
+Changed factor:
+
+- balanced table mix vs more 4-person tables
+
+Purpose:
+
+- shows that a family-oriented table mix improves performance when many groups have 3-4 people
+
+## Pair 05: Reserved Capacity
+
+Arrival file:
+
+- `pair05_arrivals_reservation_pressure.json`
+
+Variations:
+
+- `pair05a_settings_no_reserved_tables.json`
+- `pair05b_settings_one_reserved_table.json`
+
+Changed factor:
+
+- no reserved tables vs one table withheld from walk-in seating
+
+Purpose:
+
+- approximates the opportunity cost of reservation or VIP capacity
+- shows how reducing walk-in capacity increases waiting time
+
+## Pair 06: Turnover Duration
+
+Arrival file:
+
+- `pair06_arrivals_turnover_test.json`
+
+Variations:
+
+- `pair06a_settings_short_turnover.json`
+- `pair06b_settings_long_turnover.json`
+
+Changed factor:
+
+- short cleaning/turnover time vs long cleaning/turnover time
+
+Purpose:
+
+- shows how table reset time affects waiting time, service level, and throughput
+
+## Recommended Demo Pairs
+
+For a short live demo, we recommend:
+
+- Pair 01 for queue strategy
+- Pair 03 for table-size distribution
+- Pair 05 for reserved capacity
+
+For final report analysis, all 6 pairs can be used because each pair isolates one factor.

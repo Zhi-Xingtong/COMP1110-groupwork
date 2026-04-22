@@ -70,9 +70,9 @@ For a simple single-run demo:
 
 1. Run `python main.py`.
 2. Choose `Load restaurant settings`.
-3. Select `size based`.
+3. Select `pair01b size based`.
 4. Choose `Load customer arrivals`.
-5. Select `demo full showcase`.
+5. Select `pair01 mixed peak`.
 6. Choose `Run simulation`.
 7. Choose `View results`.
 
@@ -80,18 +80,18 @@ For a strategy-comparison demo:
 
 1. Run `python main.py`.
 2. Choose `Compare settings`.
-3. Select one arrival scenario, such as `demo full showcase` or `demo turnover pressure`.
-4. Select multiple settings, such as `single queue`, `coarse queue`, and `size based`.
+3. Select one paired arrival scenario, such as `pair01 mixed peak` or `pair06 turnover test`.
+4. Select the two matching settings for that pair, such as `pair01a single queue` and `pair01b size based`.
 5. Read the comparison table.
 
 Recommended comparison pairs:
 
-- `single queue` vs `size based`
+- `pair01a single queue` vs `pair01b size based`
   We use this pair to show the benefit of size-based queue assignment.
-- `coarse queue` vs `size based`
+- `pair02a coarse queues` vs `pair02b fine queues`
   We use this pair to show the effect of queue granularity.
-- `many small tables` vs `few large tables`
-  We use this pair to show how table layout affects different demand patterns.
+- `pair03a many small tables` vs `pair03b few large tables`
+  We use this pair to show how table layout affects small-party demand.
 
 ## Input File Formats
 
@@ -168,35 +168,42 @@ We can also save results as JSON from the menu.
 
 ## Case Study Data
 
-Our `case_studies/` folder contains restaurant settings and arrival scenarios for final analysis.
+Our `case_studies/` folder contains 6 paired scenarios for final analysis. In each pair, both variations use the same customer arrival pattern and change exactly one factor.
 
 Our restaurant setting files:
 
-- `settings_single_queue.json`
-- `settings_size_based.json`
-- `settings_coarse_queue.json`
-- `settings_many_small_tables.json`
-- `settings_few_large_tables.json`
+- `pair01a_settings_single_queue.json`
+- `pair01b_settings_size_based.json`
+- `pair02a_settings_coarse_queues.json`
+- `pair02b_settings_fine_queues.json`
+- `pair03a_settings_many_small_tables.json`
+- `pair03b_settings_few_large_tables.json`
+- `pair04a_settings_balanced_table_mix.json`
+- `pair04b_settings_family_table_mix.json`
+- `pair05a_settings_no_reserved_tables.json`
+- `pair05b_settings_one_reserved_table.json`
+- `pair06a_settings_short_turnover.json`
+- `pair06b_settings_long_turnover.json`
 
-Original arrival scenarios:
+Our paired arrival files:
 
-- `arrivals_peak_hour.json`
-- `arrivals_low_traffic.json`
-- `arrivals_uniform_small.json`
-- `arrivals_uniform_large.json`
+- `pair01_arrivals_mixed_peak.json`
+- `pair02_arrivals_granularity_test.json`
+- `pair03_arrivals_small_party_rush.json`
+- `pair04_arrivals_family_groups.json`
+- `pair05_arrivals_reservation_pressure.json`
+- `pair06_arrivals_turnover_test.json`
 
-Demo-friendly arrival scenarios:
+We designed these paired files to match the project requirement: each pair varies exactly one factor while keeping the customer arrival pattern fixed.
 
-- `arrivals_demo_balanced_steady.json`
-- `arrivals_demo_quiet_afternoon.json`
-- `arrivals_demo_small_party_cafe.json`
-- `arrivals_demo_family_dinner.json`
-- `arrivals_demo_two_waves.json`
-- `arrivals_demo_queue_blocking.json`
-- `arrivals_demo_turnover_pressure.json`
-- `arrivals_demo_full_showcase.json`
+Pair summary:
 
-We designed the demo-friendly files to show our algorithm working across different situations while avoiding unrealistic failure cases.
+- Pair 01: single queue vs size-based queues
+- Pair 02: coarse queues vs fine queues
+- Pair 03: many small tables vs few large tables
+- Pair 04: balanced table mix vs family-oriented table mix
+- Pair 05: no reserved tables vs one reserved table
+- Pair 06: short turnover time vs long turnover time
 
 ## How to Test
 

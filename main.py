@@ -139,6 +139,8 @@ def _friendly_name(path: str | Path, prefix: str) -> str:
     stem = Path(path).stem
     if stem.startswith(prefix):
         stem = stem[len(prefix) :]
+    else:
+        stem = stem.replace("_settings_", "_").replace("_arrivals_", "_")
     return stem.replace("_", " ").strip() or Path(path).stem.replace("_", " ")
 
 
