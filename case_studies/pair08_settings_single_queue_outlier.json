@@ -1,0 +1,15 @@
+{
+  "restaurant_name": "Pair 08 - Single Queue with Outlier Exposure",
+  "service_threshold": 15,
+  "turnover_duration": 5,
+  "queues": [
+    { "name": "Single Queue (1-8)", "min_size": 1, "max_size": 8 }
+  ],
+  "tables": [
+    { "table_id": "T1", "capacity": 2, "reserved": false },
+    { "table_id": "T2", "capacity": 2, "reserved": false },
+    { "table_id": "T3", "capacity": 4, "reserved": false },
+    { "table_id": "T4", "capacity": 4, "reserved": false },
+    { "table_id": "T5", "capacity": 8, "reserved": false }
+  ]
+}

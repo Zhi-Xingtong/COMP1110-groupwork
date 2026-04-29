@@ -1,0 +1,17 @@
+{
+  "scenario_name": "Pair 07B Trickle Flow Arrivals",
+  "groups": [
+    { "group_id": "P07-01", "arrival_time": 0, "group_size": 4, "dining_duration": 42 },
+    { "group_id": "P07-02", "arrival_time": 7, "group_size": 2, "dining_duration": 26 },
+    { "group_id": "P07-03", "arrival_time": 14, "group_size": 3, "dining_duration": 34 },
+    { "group_id": "P07-04", "arrival_time": 21, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "P07-05", "arrival_time": 28, "group_size": 4, "dining_duration": 44 },
+    { "group_id": "P07-06", "arrival_time": 35, "group_size": 2, "dining_duration": 28 },
+    { "group_id": "P07-07", "arrival_time": 42, "group_size": 3, "dining_duration": 36 },
+    { "group_id": "P07-08", "arrival_time": 49, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "P07-09", "arrival_time": 56, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "P07-10", "arrival_time": 63, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "P07-11", "arrival_time": 70, "group_size": 4, "dining_duration": 46 },
+    { "group_id": "P07-12", "arrival_time": 77, "group_size": 2, "dining_duration": 26 }
+  ]
+}

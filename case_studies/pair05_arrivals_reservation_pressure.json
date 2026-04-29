@@ -1,17 +1,17 @@
 {
   "scenario_name": "Pair 05 Reservation Pressure Arrivals",
   "groups": [
-    { "group_id": "P05-01", "arrival_time": 0, "group_size": 2, "dining_duration": 30 },
-    { "group_id": "P05-02", "arrival_time": 3, "group_size": 4, "dining_duration": 42 },
-    { "group_id": "P05-03", "arrival_time": 6, "group_size": 1, "dining_duration": 20 },
-    { "group_id": "P05-04", "arrival_time": 9, "group_size": 3, "dining_duration": 34 },
-    { "group_id": "P05-05", "arrival_time": 12, "group_size": 2, "dining_duration": 28 },
-    { "group_id": "P05-06", "arrival_time": 15, "group_size": 4, "dining_duration": 44 },
-    { "group_id": "P05-07", "arrival_time": 18, "group_size": 1, "dining_duration": 18 },
-    { "group_id": "P05-08", "arrival_time": 21, "group_size": 3, "dining_duration": 36 },
-    { "group_id": "P05-09", "arrival_time": 24, "group_size": 2, "dining_duration": 30 },
-    { "group_id": "P05-10", "arrival_time": 27, "group_size": 4, "dining_duration": 42 },
-    { "group_id": "P05-11", "arrival_time": 30, "group_size": 1, "dining_duration": 20 },
-    { "group_id": "P05-12", "arrival_time": 33, "group_size": 3, "dining_duration": 34 }
+    { "group_id": "P05-01", "arrival_time": 0, "group_size": 4, "dining_duration": 42 },
+    { "group_id": "P05-02", "arrival_time": 3, "group_size": 3, "dining_duration": 36 },
+    { "group_id": "P05-03", "arrival_time": 6, "group_size": 4, "dining_duration": 44 },
+    { "group_id": "P05-04", "arrival_time": 9, "group_size": 2, "dining_duration": 28 },
+    { "group_id": "P05-05", "arrival_time": 12, "group_size": 4, "dining_duration": 46 },
+    { "group_id": "P05-06", "arrival_time": 15, "group_size": 3, "dining_duration": 34 },
+    { "group_id": "P05-07", "arrival_time": 18, "group_size": 2, "dining_duration": 24 },
+    { "group_id": "P05-08", "arrival_time": 21, "group_size": 4, "dining_duration": 42 },
+    { "group_id": "P05-09", "arrival_time": 24, "group_size": 1, "dining_duration": 18 },
+    { "group_id": "P05-10", "arrival_time": 27, "group_size": 3, "dining_duration": 36 },
+    { "group_id": "P05-11", "arrival_time": 30, "group_size": 2, "dining_duration": 26 },
+    { "group_id": "P05-12", "arrival_time": 33, "group_size": 4, "dining_duration": 44 }
   ]
 }

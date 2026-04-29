@@ -28,7 +28,7 @@ My contribution in this phase includes:
 1. redesigning the CLI workflow so users can select settings and arrival scenarios from discovered files instead of typing raw paths every time
 2. adding a persistent status area to the main menu so the currently loaded setting and arrival scenario are always visible
 3. simplifying the displayed names of settings and scenarios so the menu is cleaner and more suitable for demo use
-4. creating a proper comparison mode that compares multiple restaurant settings against one fixed customer-arrival scenario
+4. creating a proper paired comparison mode that supports both setting-based and arrival-based pair comparisons
 5. improving comparison output with side-by-side tables and visual highlighting for best and tied-best values
 6. improving result presentation by converting the seating timeline into a structured table instead of a long text log
 7. simplifying result saving so the user can enter only a simple filename and save directly into the `results/` folder
@@ -82,8 +82,9 @@ I redesigned it into a self-contained demo workflow.
 
 Completed work:
 
-- comparison mode now asks the user to choose one customer-arrival scenario directly inside comparison mode
-- the user can then select multiple restaurant settings in one step
+- comparison mode now lets the user choose one predefined pair directly
+- for setting-side pairs, the program compares the two matching restaurant settings under one fixed arrival scenario
+- for arrival-side pairs, the program compares the two matching arrival variations under one fixed restaurant setting
 - the program outputs a side-by-side comparison table in the CLI
 - invalid or unsuitable settings no longer break the whole comparison flow
 
@@ -187,6 +188,15 @@ This gives the program a cleaner and more recognizable opening for live presenta
 - `case_studies\pair05b_settings_one_reserved_table.json`
 - `case_studies\pair06a_settings_short_turnover.json`
 - `case_studies\pair06b_settings_long_turnover.json`
+- `case_studies\pair07_settings_fixed_capacity.json`
+- `case_studies\pair08_settings_single_queue_outlier.json`
+- `case_studies\pair09_settings_reserved_capacity.json`
+- `case_studies\pair07a_arrivals_burst_peak.json`
+- `case_studies\pair07b_arrivals_trickle_flow.json`
+- `case_studies\pair08a_arrivals_standard_flow.json`
+- `case_studies\pair08b_arrivals_outlier_group.json`
+- `case_studies\pair09a_arrivals_quiet_window.json`
+- `case_studies\pair09b_arrivals_peak_window.json`
 - `tests\test_project.py`
 - `tests\test_main_helpers.py`
 - `README.md`

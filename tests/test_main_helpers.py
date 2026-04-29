@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 from app.models import SeatingRecord, SimulationResult
 from main import (
+    _build_comparison_pairs,
     _discover_input_files,
     _format_comparison_table,
     _format_queue_ranges,
@@ -95,6 +96,27 @@ class MainHelperTests(unittest.TestCase):
         resolved_path = _resolve_result_save_path(r"exports\demo.json")
 
         self.assertEqual(resolved_path, Path(r"exports\demo.json"))
+
+    def test_build_comparison_pairs_supports_setting_and_arrival_variations(self) -> None:
+        settings_paths = [
+            Path("case_studies/pair01a_settings_single_queue.json"),
+            Path("case_studies/pair01b_settings_size_based.json"),
+            Path("case_studies/pair07_settings_fixed_capacity.json"),
+        ]
+        arrival_paths = [
+            Path("case_studies/pair01_arrivals_mixed_peak.json"),
+            Path("case_studies/pair07a_arrivals_burst_peak.json"),
+            Path("case_studies/pair07b_arrivals_trickle_flow.json"),
+        ]
+
+        comparison_pairs = _build_comparison_pairs(settings_paths, arrival_paths)
+
+        self.assertEqual(comparison_pairs["pair01"]["mode"], "settings")
+        self.assertEqual(len(comparison_pairs["pair01"]["settings"]), 2)
+        self.assertEqual(len(comparison_pairs["pair01"]["arrivals"]), 1)
+        self.assertEqual(comparison_pairs["pair07"]["mode"], "arrivals")
+        self.assertEqual(len(comparison_pairs["pair07"]["settings"]), 1)
+        self.assertEqual(len(comparison_pairs["pair07"]["arrivals"]), 2)
 
     def test_format_comparison_table_includes_metric_rows(self) -> None:
         result = SimulationResult(

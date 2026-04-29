@@ -24,6 +24,7 @@ My work focuses on:
 - computing the key performance metrics required for evaluation
 - producing clear simulation results for case-study comparison
 - adding paired case-study data that varies exactly one factor per pair
+- extending the paired data pack with demand-side stress and sensitivity scenarios
 - refining the main README so the final project can be tested and understood by professors and TAs
 
 ## Problem statement for my coding contribution
@@ -96,7 +97,9 @@ These metrics allow the group to compare queue strategies and table layouts usin
 
 ## Case-study data support
 
-I also helped restructure the case-study data in `case_studies/` into paired scenarios.
+I contributed to the paired case-study data in two different ways.
+
+For `Pair 01` to `Pair 06`, I supported the construction and alignment of the formal paired-scenario pack with the simulation engine and project requirements.
 
 These files are designed to match the project requirement that each pair varies exactly one factor while using the same customer arrival pattern:
 
@@ -107,6 +110,12 @@ These files are designed to match the project requirement that each pair varies 
 - Pair 05 compares no reserved tables and one reserved table.
 - Pair 06 compares short turnover time and long turnover time.
 
+For `Pair 07` to `Pair 09`, I designed and implemented the demand-side extension scenarios as part of my contribution. These pairs keep the restaurant setting fixed while changing customer-side conditions:
+
+- Pair 07 compares burst arrivals and trickle arrivals.
+- Pair 08 compares a standard flow and a flow containing one large outlier group.
+- Pair 09 compares quiet-window and peak-window demand under the same reserved-capacity setting.
+
 The paired scenarios cover:
 
 - queue strategy
@@ -115,8 +124,13 @@ The paired scenarios cover:
 - table mix for family groups
 - reserved capacity
 - turnover duration
+- arrival concentration
+- outlier disruption
+- reservation timing mismatch under different demand states
 
 The paired scenarios are controlled so the comparison within each pair is fair and easy to explain.
+
+In particular, `Pair 07-09` extend the original setting-side comparison pack by exposing demand sensitivity, outlier disruption, and reservation timing effects that are not captured as directly by `Pair 01-06`.
 
 ## README refinement
 
@@ -146,6 +160,15 @@ This makes the repository easier for external readers to evaluate without needin
 - `case_studies/pair06_arrivals_turnover_test.json`
 - `case_studies/pair06a_settings_short_turnover.json`
 - `case_studies/pair06b_settings_long_turnover.json`
+- `case_studies/pair07_settings_fixed_capacity.json`
+- `case_studies/pair07a_arrivals_burst_peak.json`
+- `case_studies/pair07b_arrivals_trickle_flow.json`
+- `case_studies/pair08_settings_single_queue_outlier.json`
+- `case_studies/pair08a_arrivals_standard_flow.json`
+- `case_studies/pair08b_arrivals_outlier_group.json`
+- `case_studies/pair09_settings_reserved_capacity.json`
+- `case_studies/pair09a_arrivals_quiet_window.json`
+- `case_studies/pair09b_arrivals_peak_window.json`
 - `README.md`
 - `ZHI_XINGTONG_CONTRIBUTION.md`
 

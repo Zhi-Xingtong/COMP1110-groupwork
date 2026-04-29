@@ -55,7 +55,7 @@ Implemented in `main.py`, `README.md`, and project data files.
 Completed work:
 
 - built a looping text menu
-- added options to load settings, load arrivals, run simulation, view results, save results, and exit
+- added options to load settings, load arrivals, run simulation, view results, save results, compare paired scenarios, and exit
 - wrote a complete README with project overview, file list, JSON examples, run instructions, and test instructions
 - added sample JSON files for quick demonstration
 - added a richer `case_studies/` data pack to support scenario comparison and report writing
@@ -95,12 +95,21 @@ Completed work:
 - `case_studies/pair05b_settings_one_reserved_table.json`
 - `case_studies/pair06a_settings_short_turnover.json`
 - `case_studies/pair06b_settings_long_turnover.json`
+- `case_studies/pair07_settings_fixed_capacity.json`
+- `case_studies/pair08_settings_single_queue_outlier.json`
+- `case_studies/pair09_settings_reserved_capacity.json`
 - `case_studies/pair01_arrivals_mixed_peak.json`
 - `case_studies/pair02_arrivals_granularity_test.json`
 - `case_studies/pair03_arrivals_small_party_rush.json`
 - `case_studies/pair04_arrivals_family_groups.json`
 - `case_studies/pair05_arrivals_reservation_pressure.json`
 - `case_studies/pair06_arrivals_turnover_test.json`
+- `case_studies/pair07a_arrivals_burst_peak.json`
+- `case_studies/pair07b_arrivals_trickle_flow.json`
+- `case_studies/pair08a_arrivals_standard_flow.json`
+- `case_studies/pair08b_arrivals_outlier_group.json`
+- `case_studies/pair09a_arrivals_quiet_window.json`
+- `case_studies/pair09b_arrivals_peak_window.json`
 - `tests/test_project.py`
 - `WU_HANLIN_CONTRIBUTION.md`
 

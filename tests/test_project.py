@@ -190,6 +190,12 @@ class ProjectTests(unittest.TestCase):
             ("case_studies/pair05b_settings_one_reserved_table.json", "case_studies/pair05_arrivals_reservation_pressure.json"),
             ("case_studies/pair06a_settings_short_turnover.json", "case_studies/pair06_arrivals_turnover_test.json"),
             ("case_studies/pair06b_settings_long_turnover.json", "case_studies/pair06_arrivals_turnover_test.json"),
+            ("case_studies/pair07_settings_fixed_capacity.json", "case_studies/pair07a_arrivals_burst_peak.json"),
+            ("case_studies/pair07_settings_fixed_capacity.json", "case_studies/pair07b_arrivals_trickle_flow.json"),
+            ("case_studies/pair08_settings_single_queue_outlier.json", "case_studies/pair08a_arrivals_standard_flow.json"),
+            ("case_studies/pair08_settings_single_queue_outlier.json", "case_studies/pair08b_arrivals_outlier_group.json"),
+            ("case_studies/pair09_settings_reserved_capacity.json", "case_studies/pair09a_arrivals_quiet_window.json"),
+            ("case_studies/pair09_settings_reserved_capacity.json", "case_studies/pair09b_arrivals_peak_window.json"),
         ]
 
         for settings_path, arrivals_path in valid_pairs:

@@ -1,6 +1,6 @@
 # Paired Case Study Data Pack
 
-This folder contains 6 paired scenarios for the restaurant queue simulation.
+This folder contains 9 paired scenarios for the restaurant queue simulation.
 
 Each pair follows the same design rule:
 
@@ -126,6 +126,66 @@ Purpose:
 
 - shows how table reset time affects waiting time, service level, and throughput
 
+## Pair 07: Burst vs Trickle Arrivals
+
+Setting file:
+
+- `pair07_settings_fixed_capacity.json`
+
+Variations:
+
+- `pair07a_arrivals_burst_peak.json`
+- `pair07b_arrivals_trickle_flow.json`
+
+Changed factor:
+
+- concentrated arrivals in a short peak window vs the same total demand spread over a longer period
+
+Purpose:
+
+- shows how a fixed restaurant layout reacts to changes in arrival concentration
+- highlights the difference between designing for average demand and designing for peak demand
+
+## Pair 08: Outlier Disruption
+
+Setting file:
+
+- `pair08_settings_single_queue_outlier.json`
+
+Variations:
+
+- `pair08a_arrivals_standard_flow.json`
+- `pair08b_arrivals_outlier_group.json`
+
+Changed factor:
+
+- standard group mix vs the same flow with one 8-person outlier group
+
+Purpose:
+
+- shows how a single large outlier can block a single FCFS queue
+- exposes the operational cost of the no-table-combining assumption
+
+## Pair 09: Reservation Timing Mismatch
+
+Setting file:
+
+- `pair09_settings_reserved_capacity.json`
+
+Variations:
+
+- `pair09a_arrivals_quiet_window.json`
+- `pair09b_arrivals_peak_window.json`
+
+Changed factor:
+
+- a reserved-table policy under quiet demand vs the same policy under peak demand
+
+Purpose:
+
+- shows that withholding one table is much less costly in a quiet window than in a peak window
+- supports discussion of why reservation policies become riskier during busy periods
+
 ## Recommended Demo Pairs
 
 For a short live demo, we recommend:
@@ -134,4 +194,4 @@ For a short live demo, we recommend:
 - Pair 03 for table-size distribution
 - Pair 05 for reserved capacity
 
-For final report analysis, all 6 pairs can be used because each pair isolates one factor.
+For final report analysis, Pairs 01-06 remain the formal restaurant-setting comparisons, while Pairs 07-09 work well as demand-side sensitivity or stress-test extensions.

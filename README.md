@@ -61,7 +61,7 @@ Our menu provides these main actions:
 - run simulation
 - view results
 - save results as JSON
-- compare multiple restaurant settings with one arrival scenario
+- compare paired scenarios
 - exit
 
 ## Recommended Quick Demo
@@ -79,9 +79,9 @@ For a simple single-run demo:
 For a strategy-comparison demo:
 
 1. Run `python main.py`.
-2. Choose `Compare settings`.
-3. Select one paired arrival scenario, such as `pair01 mixed peak` or `pair06 turnover test`.
-4. Select the two matching settings for that pair, such as `pair01a single queue` and `pair01b size based`.
+2. Choose `Compare paired scenarios`.
+3. Select one pair from `Pair 01` to `Pair 09`.
+4. Select the two matching variations for that pair.
 5. Read the comparison table.
 
 Recommended comparison pairs:
@@ -168,7 +168,11 @@ We can also save results as JSON from the menu.
 
 ## Case Study Data
 
-Our `case_studies/` folder contains 6 paired scenarios for final analysis. In each pair, both variations use the same customer arrival pattern and change exactly one factor.
+Our `case_studies/` folder contains 9 paired scenarios for final analysis.
+
+Pairs `01-06` are restaurant-setting comparisons. In these pairs, both variations use the same customer arrival pattern and change exactly one restaurant-side factor.
+
+Pairs `07-09` are demand-side extensions. In these pairs, both variations use the same restaurant setting and change exactly one arrival-side factor.
 
 Our restaurant setting files:
 
@@ -184,6 +188,9 @@ Our restaurant setting files:
 - `pair05b_settings_one_reserved_table.json`
 - `pair06a_settings_short_turnover.json`
 - `pair06b_settings_long_turnover.json`
+- `pair07_settings_fixed_capacity.json`
+- `pair08_settings_single_queue_outlier.json`
+- `pair09_settings_reserved_capacity.json`
 
 Our paired arrival files:
 
@@ -193,8 +200,14 @@ Our paired arrival files:
 - `pair04_arrivals_family_groups.json`
 - `pair05_arrivals_reservation_pressure.json`
 - `pair06_arrivals_turnover_test.json`
+- `pair07a_arrivals_burst_peak.json`
+- `pair07b_arrivals_trickle_flow.json`
+- `pair08a_arrivals_standard_flow.json`
+- `pair08b_arrivals_outlier_group.json`
+- `pair09a_arrivals_quiet_window.json`
+- `pair09b_arrivals_peak_window.json`
 
-We designed these paired files to match the project requirement: each pair varies exactly one factor while keeping the customer arrival pattern fixed.
+We designed these paired files so each pair varies exactly one factor while keeping the rest of the system fixed.
 
 Pair summary:
 
@@ -204,6 +217,9 @@ Pair summary:
 - Pair 04: balanced table mix vs family-oriented table mix
 - Pair 05: no reserved tables vs one reserved table
 - Pair 06: short turnover time vs long turnover time
+- Pair 07: burst arrivals vs trickle arrivals
+- Pair 08: standard flow vs one outlier large group
+- Pair 09: reserved-capacity setting under quiet demand vs peak demand
 
 ## How to Test
 

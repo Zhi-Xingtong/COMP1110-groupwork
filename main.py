@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Callable
@@ -15,6 +16,7 @@ YELLOW = "\033[93m"
 RED = "\033[91m"
 DIM = "\033[90m"
 RESET = "\033[0m"
+PAIR_PATTERN = re.compile(r"(pair\d+)")
 
 
 def _prompt_path(prompt: str) -> str:
@@ -152,6 +154,56 @@ def _arrival_name(path: str | Path) -> str:
     return _friendly_name(path, "arrivals_")
 
 
+def _pair_key(path: str | Path) -> str | None:
+    match = PAIR_PATTERN.search(Path(path).stem.lower())
+    return match.group(1) if match else None
+
+
+def _pair_number(pair_key: str) -> int:
+    return int(pair_key.replace("pair", ""))
+
+
+def _build_comparison_pairs(settings_paths: list[Path], arrival_paths: list[Path]) -> dict[str, dict[str, object]]:
+    pair_map: dict[str, dict[str, list[Path] | str]] = {}
+
+    for path in settings_paths:
+        pair = _pair_key(path)
+        if pair is None:
+            continue
+        pair_entry = pair_map.setdefault(pair, {"settings": [], "arrivals": [], "mode": ""})
+        pair_entry["settings"].append(path)
+
+    for path in arrival_paths:
+        pair = _pair_key(path)
+        if pair is None:
+            continue
+        pair_entry = pair_map.setdefault(pair, {"settings": [], "arrivals": [], "mode": ""})
+        pair_entry["arrivals"].append(path)
+
+    comparison_pairs: dict[str, dict[str, object]] = {}
+    for pair, entry in sorted(pair_map.items(), key=lambda item: _pair_number(item[0])):
+        settings = sorted(entry["settings"], key=lambda path: str(path))
+        arrivals = sorted(entry["arrivals"], key=lambda path: str(path))
+        if len(arrivals) == 1 and len(settings) >= 2:
+            comparison_pairs[pair] = {"mode": "settings", "settings": settings, "arrivals": arrivals}
+        elif len(settings) == 1 and len(arrivals) >= 2:
+            comparison_pairs[pair] = {"mode": "arrivals", "settings": settings, "arrivals": arrivals}
+
+    return comparison_pairs
+
+
+def _describe_pair_option(pair_key: str, comparison_pair: dict[str, object]) -> str:
+    mode = comparison_pair["mode"]
+    pair_title = f"Pair {_pair_number(pair_key):02d}"
+    if mode == "settings":
+        arrival_name = _arrival_name(comparison_pair["arrivals"][0])
+        return f"{pair_title} - {arrival_name}"
+    arrival_variations = comparison_pair["arrivals"]
+    first_variation = _arrival_name(arrival_variations[0])
+    second_variation = _arrival_name(arrival_variations[1])
+    return f"{pair_title} - {first_variation} vs {second_variation}"
+
+
 def _setting_counts(queue_rules: list[QueueRule], tables: list[Table]) -> tuple[int, int, int]:
     return len(queue_rules), len(tables), sum(1 for table in tables if table.reserved)
 
@@ -211,15 +263,18 @@ def _prompt_discovered_path(
         return choice
 
 
-def _prompt_multiple_paths(paths: list[Path]) -> list[str]:
-    _print_discovered_options("Available restaurant settings:", paths, _describe_setting_option)
+def _prompt_multiple_paths(
+    title: str,
+    paths: list[Path],
+    describe_path: Callable[[Path], str],
+    prompt: str,
+) -> list[str]:
+    _print_discovered_options(title, paths, describe_path)
     while True:
-        raw_value = _prompt_path(
-            "Choose setting numbers separated by commas, or enter custom paths separated by commas: "
-        )
+        raw_value = _prompt_path(prompt)
         entries = [entry.strip().strip('"') for entry in raw_value.split(",") if entry.strip()]
         if not entries:
-            print("Please choose at least two settings.")
+            print("Please choose at least two entries.")
             continue
 
         resolved_paths: list[str] = []
@@ -240,9 +295,30 @@ def _prompt_multiple_paths(paths: list[Path]) -> list[str]:
 
         unique_paths = list(dict.fromkeys(resolved_paths))
         if len(unique_paths) < 2:
-            print("Please choose at least two different settings for comparison.")
+            print("Please choose at least two different entries for comparison.")
             continue
         return unique_paths
+
+
+def _prompt_comparison_pair(comparison_pairs: dict[str, dict[str, object]]) -> tuple[str, dict[str, object]]:
+    pair_items = list(comparison_pairs.items())
+    print(_blue("Available paired comparisons:"))
+    for index, (pair_key, comparison_pair) in enumerate(pair_items, start=1):
+        name = _describe_pair_option(pair_key, comparison_pair)
+        print(f"  {index}. {_blue(name)}")
+        print(f"     {_blue('-' * len(name))}")
+    print(_dim("  Type a number to choose one paired scenario."))
+
+    while True:
+        choice = _prompt_path("Choose a pair number for comparison: ")
+        if not choice or not choice.isdigit():
+            print(f"Invalid selection. Choose a number from 1 to {len(pair_items)}.")
+            continue
+        index = int(choice)
+        if not 1 <= index <= len(pair_items):
+            print(f"Invalid selection. Choose a number from 1 to {len(pair_items)}.")
+            continue
+        return pair_items[index - 1]
 
 
 def _print_status_block(
@@ -403,7 +479,7 @@ def main() -> None:
         print("3. Run simulation")
         print("4. View results")
         print("5. Save results")
-        print("6. Compare settings")
+        print("6. Compare paired scenarios")
         print("7. Exit")
 
         choice = input("Choose an option (1-7): ").strip()
@@ -471,43 +547,89 @@ def main() -> None:
                 settings_paths, arrival_paths = _discover_input_files()
                 settings_paths = _visible_choice_paths(settings_paths)
                 arrival_paths = _visible_choice_paths(arrival_paths)
-                comparison_arrival_path = _prompt_discovered_path(
-                    "Available customer arrival scenarios:",
-                    arrival_paths,
-                    _describe_arrival_option,
-                    "Choose an arrival number or enter a custom path for comparison: ",
-                )
-                comparison_scenario_name, comparison_groups = load_customer_groups(comparison_arrival_path)
-                comparison_paths = _prompt_multiple_paths(settings_paths)
+                comparison_pairs = _build_comparison_pairs(settings_paths, arrival_paths)
+                if not comparison_pairs:
+                    print("No paired scenarios are available for comparison.")
+                    continue
+
+                selected_pair_key, selected_pair = _prompt_comparison_pair(comparison_pairs)
                 comparison_results: list[tuple[str, SimulationResult]] = []
                 comparison_failures: list[tuple[str, str]] = []
-                for comparison_path in comparison_paths:
-                    setting_label = _setting_name(comparison_path)
-                    try:
-                        (
-                            comparison_restaurant_name,
-                            comparison_service_threshold,
-                            comparison_turnover_duration,
-                            comparison_queue_rules,
-                            comparison_tables,
-                        ) = load_restaurant_settings(comparison_path)
-                        comparison_result = run_simulation(
-                            restaurant_name=comparison_restaurant_name,
-                            scenario_name=comparison_scenario_name,
-                            queue_rules=comparison_queue_rules,
-                            tables=comparison_tables,
-                            groups=comparison_groups,
-                            service_threshold=comparison_service_threshold,
-                            turnover_duration=comparison_turnover_duration,
-                            allow_unserviceable_groups=True,
-                        )
-                    except (FileNotFoundError, ValueError, KeyError, TypeError) as error:
-                        comparison_failures.append((setting_label, str(error)))
-                        continue
-                    comparison_results.append((setting_label, comparison_result))
+                pair_title = f"Pair {_pair_number(selected_pair_key):02d}"
 
-                print()
-                print(f"Comparison for scenario '{comparison_scenario_name}':")
+                if selected_pair["mode"] == "settings":
+                    comparison_arrival_path = selected_pair["arrivals"][0]
+                    comparison_scenario_name, comparison_groups = load_customer_groups(comparison_arrival_path)
+                    comparison_paths = _prompt_multiple_paths(
+                        "Available restaurant setting variations:",
+                        selected_pair["settings"],
+                        _describe_setting_option,
+                        "Choose variation numbers separated by commas for comparison: ",
+                    )
+                    for comparison_path in comparison_paths:
+                        setting_label = _setting_name(comparison_path)
+                        try:
+                            (
+                                comparison_restaurant_name,
+                                comparison_service_threshold,
+                                comparison_turnover_duration,
+                                comparison_queue_rules,
+                                comparison_tables,
+                            ) = load_restaurant_settings(comparison_path)
+                            comparison_result = run_simulation(
+                                restaurant_name=comparison_restaurant_name,
+                                scenario_name=comparison_scenario_name,
+                                queue_rules=comparison_queue_rules,
+                                tables=comparison_tables,
+                                groups=comparison_groups,
+                                service_threshold=comparison_service_threshold,
+                                turnover_duration=comparison_turnover_duration,
+                                allow_unserviceable_groups=True,
+                            )
+                        except (FileNotFoundError, ValueError, KeyError, TypeError) as error:
+                            comparison_failures.append((setting_label, str(error)))
+                            continue
+                        comparison_results.append((setting_label, comparison_result))
+
+                    print()
+                    print(f"{pair_title} comparison using scenario '{comparison_scenario_name}':")
+                else:
+                    comparison_setting_path = selected_pair["settings"][0]
+                    (
+                        comparison_restaurant_name,
+                        comparison_service_threshold,
+                        comparison_turnover_duration,
+                        comparison_queue_rules,
+                        comparison_tables,
+                    ) = load_restaurant_settings(comparison_setting_path)
+                    comparison_paths = _prompt_multiple_paths(
+                        "Available arrival variations:",
+                        selected_pair["arrivals"],
+                        _describe_arrival_option,
+                        "Choose variation numbers separated by commas for comparison: ",
+                    )
+                    for comparison_path in comparison_paths:
+                        arrival_label = _arrival_name(comparison_path)
+                        try:
+                            comparison_scenario_name, comparison_groups = load_customer_groups(comparison_path)
+                            comparison_result = run_simulation(
+                                restaurant_name=comparison_restaurant_name,
+                                scenario_name=comparison_scenario_name,
+                                queue_rules=comparison_queue_rules,
+                                tables=comparison_tables,
+                                groups=comparison_groups,
+                                service_threshold=comparison_service_threshold,
+                                turnover_duration=comparison_turnover_duration,
+                                allow_unserviceable_groups=True,
+                            )
+                        except (FileNotFoundError, ValueError, KeyError, TypeError) as error:
+                            comparison_failures.append((arrival_label, str(error)))
+                            continue
+                        comparison_results.append((arrival_label, comparison_result))
+
+                    print()
+                    print(f"{pair_title} comparison using setting '{comparison_restaurant_name}':")
+
                 if comparison_results:
                     print(_format_comparison_table(comparison_results))
                 else:
