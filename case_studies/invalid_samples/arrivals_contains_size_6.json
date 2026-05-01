@@ -1,0 +1,17 @@
+{
+  "scenario_name": "Invalid Sample - Includes Size 6",
+  "groups": [
+    {
+      "group_id": "I01",
+      "arrival_time": 0,
+      "group_size": 2,
+      "dining_duration": 20
+    },
+    {
+      "group_id": "I02",
+      "arrival_time": 3,
+      "group_size": 6,
+      "dining_duration": 40
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 
 This folder contains 9 paired scenarios for the restaurant queue simulation.
 
+For a compact report-oriented index of the scenario files, changed factors, and reproducibility notes, see `SCENARIO_INDEX.md`.
+
 Each pair follows the same design rule:
 
 - both variations use the same customer arrival file

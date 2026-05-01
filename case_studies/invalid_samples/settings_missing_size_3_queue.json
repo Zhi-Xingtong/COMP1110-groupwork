@@ -1,0 +1,29 @@
+{
+  "restaurant_name": "Invalid Sample - Queue Gap",
+  "service_threshold": 15,
+  "turnover_duration": 5,
+  "queues": [
+    {
+      "name": "Queue A (1-2)",
+      "min_size": 1,
+      "max_size": 2
+    },
+    {
+      "name": "Queue B (4-6)",
+      "min_size": 4,
+      "max_size": 6
+    }
+  ],
+  "tables": [
+    {
+      "table_id": "T1",
+      "capacity": 2,
+      "reserved": false
+    },
+    {
+      "table_id": "T2",
+      "capacity": 6,
+      "reserved": false
+    }
+  ]
+}

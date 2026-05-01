@@ -4,122 +4,160 @@
 
 Member name: Wu Hanlin
 
-According to the project plan table, Wu Hanlin is responsible for:
+According to the group task allocation, my assigned coding responsibilities were:
 
 - `C2` File I/O
-- `C5` Text menu, README, GitHub support materials
+- `C5` Text menu, README, and GitHub support materials
 - `C6` Test cases
+- `C8` Scenario data quality and reproducibility support
 
-## Contribution summary
+## Contribution focus
 
-My contribution is not the low-level simulation algorithm itself. My role is to turn the project into a complete, runnable, testable, and presentable program.
+My contribution focused on the **program support layer** around the simulation engine.
 
-The main parts of my contribution are:
+I did not mainly work on the core simulation algorithm, data model, or metric formulas. Those parts belong to the engine layer. My role was to make the project usable, testable, and understandable as a complete submitted program.
 
-- completing the input and output file workflow
-- building the text menu for direct use
-- writing the README and example data
-- adding richer case-study data for demo and report use
-- writing and extending the automated test cases
+The main purpose of my work was to connect the core simulation with practical project use:
 
-## Problem statement for my coding contribution
+- users can load restaurant settings and customer arrivals from JSON files
+- users can run the program through a text menu instead of calling functions manually
+- users can save simulation results for later checking and report writing
+- the repository has clear instructions and example data
+- the implementation is supported by repeatable automated tests
+- scenario files are organised and documented so report results can be reproduced
 
-My part of the project is to make the simulation usable as a complete program instead of only a partial engine file.
+This contribution is different from later demo refinements. My work established the basic file workflow, menu workflow, documentation base, sample data, and testing coverage needed for the project to run reliably.
 
-The practical problems I solved are:
+## C2: File I/O
 
-- how to load restaurant settings and customer arrivals from JSON files safely
-- how to save simulation results into a reusable JSON output
-- how to let users operate the project through a clear text menu
-- how to explain the project structure and JSON format in a README
-- how to provide enough data for demo and report use
-- how to prove the program works through systematic test cases
+Implemented mainly in `app/file_io.py`.
 
-## Code I completed
+For this part, I created the file input and output functions used by the rest of the program.
 
-### C2: File I/O
+My work included:
 
-Implemented in `app/file_io.py`.
+- implementing JSON reading for restaurant setting files
+- implementing JSON reading for customer arrival files
+- converting JSON data into the project model objects used by the simulator
+- supporting optional fields such as turnover duration and reserved tables
+- saving simulation results back into a JSON file
+- adding error handling for missing files, empty files, invalid JSON, and incorrect top-level JSON structures
 
-Completed work:
+This part is important because it separates external data files from the simulation code. It means the project can run many different scenarios without changing Python code each time.
 
-- load restaurant settings JSON
-- load customer arrival JSON
-- save simulation results JSON
-- handle input errors such as missing file, empty file, and invalid JSON format
+For my individual report, this part can be explained as the bridge between user-provided data and the internal simulation model.
 
-### C5: Text menu and project documentation
+## C5: Text menu, README, and project support materials
 
-Implemented in `main.py`, `README.md`, and project data files.
+Implemented mainly in `main.py`, `README.md`, `sample_data/`, and part of `case_studies/`.
 
-Completed work:
+For the text interface, I contributed the basic command-line workflow that lets a user operate the project directly.
 
-- built a looping text menu
-- added options to load settings, load arrivals, run simulation, view results, save results, compare paired scenarios, and exit
-- wrote a complete README with project overview, file list, JSON examples, run instructions, and test instructions
-- added sample JSON files for quick demonstration
-- added a richer `case_studies/` data pack to support scenario comparison and report writing
+My work included:
 
-### C6: Test cases
+- building the menu structure for loading settings, loading arrivals, running the simulation, viewing results, saving results, and exiting
+- connecting menu options with the file I/O functions and the simulation engine
+- checking whether required inputs had been loaded before running the simulation
+- displaying clear messages when files or inputs were invalid
+- supporting result export through the menu
 
-Implemented in `tests/test_project.py`.
+For the documentation and support files, I helped make the repository easier to understand and assess.
 
-Completed work:
+My work included:
 
-- normal operation test
-- all same group size test
-- zero customers test
-- group larger than any table test
-- boundary capacity match test
-- invalid input file test
-- end-to-end JSON load/save integration test
-- case-study dataset loading and simulation test
+- writing the README structure for project overview, file structure, running instructions, input format, output metrics, and test instructions
+- preparing sample JSON files for quick testing
+- adding supporting case-study files that can be used for demonstration and report discussion
+- keeping file names and folder structure understandable for future use
 
-## Files that clearly show my contribution
+This C5 work provides the basic user-facing layer of the project. Later refinements to the demo interface, comparison display, status area, and presentation polish are separate from my main contribution.
+
+## C6: Test cases
+
+Implemented mainly in `tests/test_project.py`.
+
+For this part, I wrote and extended tests to check that the project works across normal, boundary, and error cases.
+
+My work included tests for:
+
+- normal simulation operation
+- multiple groups with the same group size
+- zero-customer input
+- a group that is larger than any available table
+- capacity boundary matching, such as a group of 2 using a 2-seat table
+- invalid JSON input
+- loading restaurant settings and arrivals from JSON files
+- saving simulation results as JSON
+- running case-study data through the simulation
+
+The purpose of these tests is not only to check one output value. They also show that the file I/O layer, simulator call, and result-saving workflow can work together as an end-to-end program.
+
+For my individual report, this part can be explained as verification work: I tested both the expected workflow and the failure cases that a user may encounter.
+
+## C8: Scenario data quality and reproducibility support
+
+Implemented mainly in `case_studies/SCENARIO_INDEX.md`, `case_studies/README.md`, and `case_studies/invalid_samples/`.
+
+This part does not change the original simulation logic or the CLI workflow. It supports the project by making the data pack easier to inspect, reproduce, and explain.
+
+My work included:
+
+- organising the case-study files so each pair has a clear fixed input and changed factor
+- documenting which scenario files belong together
+- separating normal demo/report scenarios from intentionally invalid robustness examples
+- adding report-oriented notes so the same scenario pairs can be reused consistently in the final report
+- supporting validation discussion through invalid examples such as capacity mismatch and missing queue-rule coverage
+
+This C8 work is different from Zhao Zihao's `C7` work. C7 improves the user interface, navigation, display tables, comparison highlighting, and result-saving experience. C8 focuses on data quality, scenario traceability, and reproducibility, without changing how the program runs.
+
+## Contribution boundary with teammates
+
+To avoid overlap, my contribution should be understood within these boundaries:
+
+- I was responsible for `C2`, so I can discuss JSON loading, JSON saving, file validation, and how external data enters or leaves the program.
+- I was responsible for `C5`, so I can discuss the basic menu workflow, README instructions, sample data, and project support materials.
+- I was responsible for `C6`, so I can discuss the automated tests and how they verify important scenarios.
+- I was responsible for `C8`, so I can discuss data-pack organisation, scenario indexing, invalid sample documentation, and reproducibility support.
+- I should not claim the main data model, event-driven simulation algorithm, seating logic, or metric formulas as my own core work.
+- I should not claim the later final-stage CLI polish, comparison-table redesign, persistent status display, revenue-per-minute feature, or demo banner as my main work.
+
+This boundary keeps my contribution clear and avoids repeating the work described by other group members.
+
+## Files that show my contribution
+
+The files most directly related to my contribution are:
 
 - `app/file_io.py`
 - `main.py`
 - `README.md`
 - `sample_data/restaurant_settings.json`
 - `sample_data/customer_arrivals.json`
+- `case_studies/SCENARIO_INDEX.md`
 - `case_studies/README.md`
-- `case_studies/pair01a_settings_single_queue.json`
-- `case_studies/pair01b_settings_size_based.json`
-- `case_studies/pair02a_settings_coarse_queues.json`
-- `case_studies/pair02b_settings_fine_queues.json`
-- `case_studies/pair03a_settings_many_small_tables.json`
-- `case_studies/pair03b_settings_few_large_tables.json`
-- `case_studies/pair04a_settings_balanced_table_mix.json`
-- `case_studies/pair04b_settings_family_table_mix.json`
-- `case_studies/pair05a_settings_no_reserved_tables.json`
-- `case_studies/pair05b_settings_one_reserved_table.json`
-- `case_studies/pair06a_settings_short_turnover.json`
-- `case_studies/pair06b_settings_long_turnover.json`
-- `case_studies/pair07_settings_fixed_capacity.json`
-- `case_studies/pair08_settings_single_queue_outlier.json`
-- `case_studies/pair09_settings_reserved_capacity.json`
-- `case_studies/pair01_arrivals_mixed_peak.json`
-- `case_studies/pair02_arrivals_granularity_test.json`
-- `case_studies/pair03_arrivals_small_party_rush.json`
-- `case_studies/pair04_arrivals_family_groups.json`
-- `case_studies/pair05_arrivals_reservation_pressure.json`
-- `case_studies/pair06_arrivals_turnover_test.json`
-- `case_studies/pair07a_arrivals_burst_peak.json`
-- `case_studies/pair07b_arrivals_trickle_flow.json`
-- `case_studies/pair08a_arrivals_standard_flow.json`
-- `case_studies/pair08b_arrivals_outlier_group.json`
-- `case_studies/pair09a_arrivals_quiet_window.json`
-- `case_studies/pair09b_arrivals_peak_window.json`
+- `case_studies/invalid_samples/README.md`
 - `tests/test_project.py`
 - `WU_HANLIN_CONTRIBUTION.md`
 
-## Short summary
+Supporting files that also connect to my work:
 
-My contribution makes the project complete from a user perspective:
+- `case_studies/README.md`
+- `case_studies/*.json`
 
-- input can be loaded from files
-- the simulation can be run from a menu
-- output can be viewed and saved
-- the project can be understood from the README
-- there is enough data to support demo and case-study discussion
-- the implementation is supported by repeatable tests
+The case-study files should be described carefully in my report. I can mention that I helped provide data support for testing, demonstration, and report discussion, but I should avoid claiming all scenario design decisions if they overlap with teammates' contribution statements.
+
+## Individual report notes
+
+For the individual report, my contribution can be organised in this order:
+
+1. Explain the problem my part solved: the simulator needed external data loading, user operation, output saving, documentation, and tests.
+2. Explain `C2`: how JSON settings and arrivals are loaded, validated, converted, and saved.
+3. Explain `C5`: how the command-line menu and README made the project usable by tutors and group members.
+4. Explain `C6`: how tests covered normal operation, edge cases, error handling, and integration between files and simulation.
+5. Explain `C8`: how the case-study data pack was organised and documented for reproducible report use.
+6. Explain my boundary: I supported the complete program around the engine, while the core simulation algorithm and later demo polish were handled separately.
+
+## Short conclusion
+
+My contribution made the project complete from a practical user and submission perspective.
+
+Through `C2`, `C5`, `C6`, and `C8`, I helped turn the simulation engine into a runnable, documented, data-driven, reproducible, and testable program. This work supports the rest of the group by making the system easier to operate, verify, demonstrate, and explain in the final report.

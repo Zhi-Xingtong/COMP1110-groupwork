@@ -1,0 +1,11 @@
+{
+  "scenario_name": "Invalid Sample - Needs Size 3 Queue",
+  "groups": [
+    {
+      "group_id": "Q01",
+      "arrival_time": 0,
+      "group_size": 3,
+      "dining_duration": 25
+    }
+  ]
+}
