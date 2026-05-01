@@ -1,29 +1,16 @@
-# Zhao Zihao Contribution Statement
+# Individual Final Report 
 
-## Identity
-
-Member name: Zhao Zihao
+## Zhao Zihao
 
 ## Contribution focus
 
-My contribution in this stage of the project is the **demo-oriented refinement and coding improvement** of the restaurant queue simulation system.  
-The main goal of my work was not to redesign the whole simulation model from scratch, but to turn the existing project into a clearer, more convincing, and more presentation-ready program for final demonstration and practical use.
+My contribution in this project is mostly about the demo-oriented refinement and coding GUI improvement of the restaurant queue simulation system.
 
-The work I completed in this stage focuses on:
-
-- improving command-line interaction and usability
-- making the program easier to operate in a live demo
-- improving the readability of simulation outputs
-- making comparison mode more useful for strategy evaluation
-- refining case-study settings so comparisons are fairer and more defensible
-- adding more meaningful business-style evaluation metrics
-
-## Main contribution summary
-
-I led and completed a substantial round of final-stage refinement work on the Python CLI application.  
-This work was aimed at making the project easier to demonstrate, easier to interpret, and more aligned with how queue strategies and seating configurations should be compared in practice.
+The main goal of my work is to optimize the user experience of this simulation model, making it more user-friendly and clearer for our final demostration.
 
 My contribution in this phase includes:
+
+### Coding part
 
 1. redesigning the CLI workflow so users can select settings and arrival scenarios from discovered files instead of typing raw paths every time
 2. adding a persistent status area to the main menu so the currently loaded setting and arrival scenario are always visible
@@ -32,9 +19,11 @@ My contribution in this phase includes:
 5. improving comparison output with side-by-side tables and visual highlighting for best and tied-best values
 6. improving result presentation by converting the seating timeline into a structured table instead of a long text log
 7. simplifying result saving so the user can enter only a simple filename and save directly into the `results/` folder
-8. normalizing the case-study settings so the main strategy and seating-layout comparisons use a fairer total seat count of 20
-9. adding an economic-style metric, **revenue per minute**, based on a fixed per-customer spending assumption
-10. adding a `Group 15` startup ASCII banner so the CLI opens with a clearer group identity during demo
+8. adding an economic-style metric, **revenue per minute**, based on a fixed per-customer spending assumption
+
+### Demo part:
+
+1. I have documented the complete workflow of my program to assist the TA in understanding its operation. This documentation covers the entire process: from cloning the repository and selecting specific strategy and scenario configurations to utilizing the comparison function. Additionally, I have included a dataset to demonstrate how the program processes data and generates results.
 
 ## Detailed contribution record
 
@@ -131,22 +120,10 @@ Completed work:
 
 This is a small but important usability improvement for live demonstration.
 
-### 7. Strategy and seating-layout comparison fairness
-
-I adjusted the case-study settings so the total seat count is more consistent and the comparisons are more defensible.
-
-Completed work:
-
-- normalized the three queue-strategy settings to the same total seating capacity:
-  - `2 + 2 + 2 + 4 + 4 + 6 = 20`
-- kept `few large tables` at:
-  - `4 + 4 + 6 + 6 = 20`
-- changed `many small tables` to:
-  - `2 + 2 + 2 + 2 + 2 + 2 + 4 + 4 = 20`
 
 This improves fairness by reducing distortion caused by different total seat counts.
 
-### 8. Business-oriented metric improvement
+### 7. Business-oriented metric improvement
 
 I added a more meaningful performance metric based on a simple economic assumption.
 
@@ -160,7 +137,7 @@ Completed work:
 
 This helps the project move from a purely operational evaluation toward a more practical efficiency interpretation.
 
-### 9. Demo identity and startup presentation
+### 8. Demo identity and startup presentation
 
 I also improved the first impression of the CLI by adding a startup banner.
 
@@ -224,9 +201,18 @@ In particular, I contributed:
 - the persistent menu status display
 - the redesigned comparison mode
 - clearer result presentation
-- fairer 20-seat case-study settings
 - the new revenue-per-minute metric
 - the `Group 15` startup banner
 - the associated testing and integration work
 
 This work directly improves how the project is operated, demonstrated, and evaluated.
+
+
+
+## AI report:
+
+I used github copilot cli (GPT 5.4) to help me code and improve our program. I'm using it to write unit test and system test to verify its correctness, let it write a PRD before coding, and use opus 4.6 to doublecheck its correctness. I also use git to perform version control part so that I can cancel unwanted or problematic ai coding.
+
+
+
+I also use ai to help me make subtitle which has time stamp so that i dont need to type it into my computer by myself.
