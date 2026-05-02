@@ -70,16 +70,16 @@ Completed work:
 
 ## Short conclusion
 
-My contribution in this phase establishes the **theoretical foundation, modeling limits, and analytical evaluation** of the simulation system. 
+My contribution in this phase establishes the theoretical foundation, modeling limits, and analytical evaluation of the simulation system. 
 
 By conducting background research, defining modeling assumptions, writing the comprehensive trade-off analyses, and structuring the final report, I successfully transformed our coding efforts into a complete data-science evaluation project.
 
 ## Personal Evaluation
 
-**What worked well:**
+What worked well:
 I believe I performed well in translating a chaotic daily-life problem into a structured computing problem. The clear separation of duties between the coding team and myself worked exceptionally well.
 
-**What did not work well (and how it was resolved):**
+What did not work well (and how it was resolved):
 Initially, we struggled with our case studies. We planned 6 pairs, but we later considered that Pairs 03, 04, 05 and 06 lacked analytical depth. Furthermore, we faced a methodology conflict regarding whether changing "customer arrival patterns" violated the rule of varying exactly one setting. We successfully resolved this by clarifying with the Lecturer and restructuring our report to feature Pairs 01 and 02 as "core operational tests," and Pairs 07, 08, and 09 as advanced "demand-side stress tests." 
 
 ## Reflection
@@ -92,8 +92,8 @@ I also developed a much sharper critical eye for data. For example, I learned th
 
 I am documenting my usage of AI tools for the writing process.
 
-- **AI Tool Used:** Perplexity AI (Gemini 3.1 Pro Thinking).
-- **Prompts Used:** 
+- AI Tool Used: Perplexity AI (Gemini 3.1 Pro Thinking).
+- Prompts Used: 
   - *"我们小组一共有5个人 这怎么分工"*
   - *"详细描述一下他们的coding是什么样一个逻辑 实现了哪些功能"*
   - *"case study的run simulation的结果是什么样的现在他们已经设计好了 这是casestudy文件夹里和readme"*
@@ -109,7 +109,7 @@ I am documenting my usage of AI tools for the writing process.
   - *"这个system design是不是应该进行一点seperation描述 怎么seperate更科学呢"*
   - *"key functions是不是应该聚焦于我们这个项目的两大特征 一个是比较 一个是单独的simulation"*
 
-**For R1 (Real-world queue strategies):** I used AI to help brainstorm the comparison framework for the four queue systems. However, I manually provided and integrated the specific real-world contexts (e.g., Café de Coral, DaZhongDianPing, Sushiro) and verified that the AI-extracted "underlying assumptions" accurately matched the constraints of our actual project.
-**For R3 (Modeling assumptions):** I prompted the AI to help articulate the technical constraints of queueing theory. I then manually refined these points into our specific assumptions (such as "No table combining" and "Infinite patience") and personally wrote the "Reasons" and "Limitations" sections to ensure they reflected our exact Python implementation rather than generic theories.
-**For S2 & W2 (Case Studies and Final Report Drafting):** I used AI to explain our system architecture. I strictly reviewed the AI's description of our code to remove any hallucinated features, ensuring it accurately described our specific text-based menu and event-driven clock. When the AI generated analytical frameworks for the case studies, I manually inserted the exact numerical data (e.g., specific wait times and utilization percentages) gained when I did the comparision simulation. I also used AI to brainstorm more possible case studies from different angles.
+**For R1 (Real-world queue strategies):** I used AI to help brainstorm the comparison framework for the four queue systems. However, I manually provided and integrated the specific real-world contexts (e.g., Café de Coral, DaZhongDianPing, Sushiro) and verified that the AI-extracted "underlying assumptions" accurately matched the constraints of our actual project.  
+**For R3 (Modeling assumptions):** I prompted the AI to help articulate the technical constraints of queueing theory. I then manually refined these points into our specific assumptions (such as "No table combining" and "Infinite patience") and personally wrote the "Reasons" and "Limitations" sections to ensure they reflected our exact Python implementation rather than generic theories.  
+**For S2 & W2 (Case Studies and Final Report Drafting):** I used AI to explain our system architecture. I strictly reviewed the AI's description of our code to remove any hallucinated features, ensuring it accurately described our specific text-based menu and event-driven clock. When the AI generated analytical frameworks for the case studies, I manually inserted the exact numerical data (e.g., specific wait times and utilization percentages) gained when I did the comparision simulation. I also used AI to brainstorm more possible case studies from different angles.  
 **For W1 (Project plan):** I used AI to evaluate the workload and asked for suggestions on the work distribution.
