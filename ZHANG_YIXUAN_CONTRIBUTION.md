@@ -94,6 +94,7 @@ I am documenting my usage of AI tools for the writing process.
 
 - **AI Tool Used:** Perplexity AI (Gemini 3.1 Pro Thinking).
 - **Prompts Used:** 
+  - *"我们小组一共有5个人 这怎么分工"*
   - *"详细描述一下他们的coding是什么样一个逻辑 实现了哪些功能"*
   - *"case study的run simulation的结果是什么样的现在他们已经设计好了 这是casestudy文件夹里和readme"*
   - *"这是我们casestudy的readme 现在我要开始写S2 该从哪些角度分析trade-off和overall conclusion caseresult我都给你了"*
@@ -107,3 +108,8 @@ I am documenting my usage of AI tools for the writing process.
   - *"你看到我之前给你的casestudy的readme没 一共9个pair 但是实际的report中我们只分析了12789这5个高含金量的 这个过渡句怎么改 在哪里改 我发给过你我们的fianl report"*
   - *"这个system design是不是应该进行一点seperation描述 怎么seperate更科学呢"*
   - *"key functions是不是应该聚焦于我们这个项目的两大特征 一个是比较 一个是单独的simulation"*
+
+**For R1 (Real-world queue strategies):** I used AI to help brainstorm the comparison framework for the four queue systems. However, I manually provided and integrated the specific real-world contexts (e.g., Café de Coral, DaZhongDianPing, Sushiro) and verified that the AI-extracted "underlying assumptions" accurately matched the constraints of our actual project.
+**For R3 (Modeling assumptions):** I prompted the AI to help articulate the technical constraints of queueing theory. I then manually refined these points into our specific assumptions (such as "No table combining" and "Infinite patience") and personally wrote the "Reasons" and "Limitations" sections to ensure they reflected our exact Python implementation rather than generic theories.
+**For S2 & W2 (Case Studies and Final Report Drafting):** I used AI to explain our system architecture. I strictly reviewed the AI's description of our code to remove any hallucinated features, ensuring it accurately described our specific text-based menu and event-driven clock. When the AI generated analytical frameworks for the case studies, I manually inserted the exact numerical data (e.g., specific wait times and utilization percentages) gained when I did the comparision simulation. I also used AI to brainstorm more possible case studies from different angles.
+**For W1 (Project plan):** I used AI to evaluate the workload and asked for suggestions on the work distribution.
